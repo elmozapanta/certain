@@ -1,0 +1,43 @@
+name: Main
+
+on:
+  push:
+      branches: [ master ]
+  pull_request:
+      branches: [ master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        dotnet-version: [ 6.0.x ]
+
+    steps:   
+      - uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.17.1'
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --network-timeout 600000 install
+
+      - name: Print debug info
+        run: dotnet --info
+
+      - name: Build
+        run: yarn build
+
+      - name: Test
+        run: yarn test

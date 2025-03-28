@@ -1,0 +1,165 @@
+.nexusmods-action-button {
+  display: inline;
+  background: $brand-primary;
+  padding: 10px 9px;
+  margin: 0 8px;
+  > svg {
+    margin-right: 5px;
+    color: transparent;
+    --nexus-outline-color: transparent;
+    --nexus-orange-color: transparent;
+    --nexus-orange-darker-color: transparent;
+  }
+
+  >.nexusmods-fake-link {
+    color: $white;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-decoration: none;
+    line-height: 1.3;
+  }
+}
+
+.nexus-download-banner {
+  background-color: $brand-info;
+  text-align: center;
+  padding: 4px 0;
+  border: $border-width solid $border-color;
+  border-bottom: 0;
+  .btn {
+    margin-left: 8px;
+  }
+}
+
+.nexus-main-banner {
+  background-size: cover !important;
+  // no vertical padding. If custom titlebar mode this makes no difference as the
+  // banner fills the available vertical space and that produces the exact same padding.
+  // In generic titlebar mode, the padding was pretty bad because it forced the entire
+  // header area to be wider for non-premium users compared to premium users.
+  padding: 0 10px;
+  width: 320px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  div:first-child {
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: x-large;
+  }
+
+  .right-center {
+    position: absolute;
+    right: 16px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &.btn.btn-default:hover {
+      background-color: $brand-primary;
+      color: $gray-darker;
+    }
+  }
+}
+
+.nexus-premium-banner {
+  margin: 0 $half-gutter $half-gutter;
+  height: 100%;
+
+  border-top: $border-width solid $border-color;
+
+  > .layout-container {
+    align-items: center;
+    margin: 0.5em 0;
+    font-size: larger;
+  }
+
+  .icon {
+    width: 2em;
+    height: 2em;
+    margin-right: 0.5em;
+    fill: $brand-primary;
+  }
+
+  .nexus-premium-highlight {
+    color: $brand-primary;
+  }
+}
+
+.flex-spread {
+  display: flex;
+  justify-content: space-between;
+}
+
+.padding-hg {
+  padding: $half-gutter;
+}
+
+.margin-top-hg {
+  margin-top: $half-gutter;
+}
+
+.free-user-dl-image {
+  max-width: 220px;
+  max-height: 120px;
+  width: auto;
+  height: auto;
+  margin-right: $half-gutter;
+}
+
+.free-user-dl-name {
+  font-weight: bold;
+  font-size: larger;
+  font-family: $font-family-headings;
+  margin-bottom: 0.5em;
+}
+
+.free-user-dl-uploader {
+  display: flex;
+  align-items: center;
+  font-family: $font-family-headings;
+  img {
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: 0.5em;
+  }
+}
+
+.free-user-dl-summary {
+  margin-top: 0.5em;
+}
+
+.modid-detail {
+  table {
+    margin-bottom: 1em;
+  }
+  tr {
+    border-top: 0.5em solid transparent;
+  }
+  th {
+    margin-right: 1em;
+  }
+}
+
+.nexus-id-valid {
+  color: $brand-success;
+}
+
+.nexus-id-invalid {
+  color: $brand-warning;
+}
+
+.modid-detail-control {
+  vertical-align: top;
+}
+
+.no-margin {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+}

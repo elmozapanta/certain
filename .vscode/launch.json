@@ -1,0 +1,125 @@
+{
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Debug Electron",
+      "configurations": [
+        "Debug Main Process",
+        "Debug Renderer Process"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "",
+        "order": 1
+      },
+      "stopAll": true,
+    },
+    {
+      "name": "Debug Electron (Staging)",
+      "configurations": [
+        "Debug Main Process (Staging)",
+        "Debug Renderer Process"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "",
+        "order": 1
+      },
+      "stopAll": true
+    },
+    {
+      "name": "Debug Electron (Nexus Next)",
+      "configurations": [
+        "Debug Main Process (Nexus Next)",
+        "Debug Renderer Process"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "",
+        "order": 1
+      },
+      "stopAll": true
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Debug Main Process",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/main.js",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+      },
+      "runtimeArgs": [
+        "."
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "START_DEVTOOLS": "true",
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "outFiles": []
+    },
+    {
+      "name": "Debug Main Process (Staging)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/main.js",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+      },
+      "runtimeArgs": [
+        "."
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "START_DEVTOOLS": "true",
+        "IS_PREVIEW_BUILD": "true"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "outFiles": []
+    },
+    {
+      "name": "Debug Main Process (Nexus Next)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/main.js",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+      },
+      "runtimeArgs": [
+        "."
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "START_DEVTOOLS": "true",
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "outFiles": []
+    },
+    {
+      "name": "Debug Renderer Process",
+      "port": 9230,
+      "request": "attach",
+      "type": "chrome",
+      "timeout": 60000,
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceRoot}/node_modules/**",
+        "${workspaceRoot}/dist-electron/**"
+      ]
+    },
+  ]
+}
