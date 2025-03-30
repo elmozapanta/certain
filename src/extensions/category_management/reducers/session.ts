@@ -6,7 +6,7 @@ import * as actions from '../actions/session';
 /**
  * reducer for changes to ephemeral session state
  */
-export const sessionReducer: IReducerSpec = {
+export let sessionReducer: IReducerSpec = {
   reducers: {
     [actions.showCategoriesDialog as any]: (state, payload) =>
       setSafe(state, [ 'showDialog' ], payload),
