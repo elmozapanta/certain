@@ -1,9 +1,9 @@
-const fs = require('fs');
-const _ = require('lodash');
-const path = require('path');
-const xml2js = require('xml2js');
+let fs = require('fs');
+let _ = require('lodash');
+let path = require('path');
+let xml2js = require('xml2js');
 
-const nameMap = {
+let nameMap = {
   'fat-add': 'plus',
   'select-83': 'arrow-updown',
   'link-69': 'chain',
@@ -56,7 +56,7 @@ const nameMap = {
 };
 
 // fix icons that incorrectly have a color set
-const decolorize = new Set([
+let decolorize = new Set([
   'nc-skew-up',
   'nc-skew-down',
   'nc-skew-left',
@@ -70,13 +70,13 @@ function transformId(id) {
 }
 
 function transformAttributes(attrs) {
-  const res = Object.assign({}, attrs);
+  let res = Object.assign({}, attrs);
   res.id = transformId(res.id);
   return res;
 }
 
 function transformPath(p, decol) {
-  const res = Object.assign({}, p);
+  let res = Object.assign({}, p);
   if (decol || (res.$.fill === 'currentColor')) {
     delete res.$.fill;
   } else if ((res.$.fill === 'none') && (res.$.stroke === undefined)) {
@@ -90,7 +90,7 @@ function transformPath(p, decol) {
 }
 
 function transformG(g, decol) {
-  const res = Object.assign({}, g);
+  let res = Object.assign({}, g);
   if (res.$.fill === 'currentColor') {
     delete res.$.fill;
   }
@@ -100,7 +100,7 @@ function transformG(g, decol) {
   return res;
 }
 
-const data = fs.readFileSync(path.join('..', 'fonts', 'myicons', 'svg', 'img', 'nc-icons.svg'));
+let data = fs.readFileSync(path.join('..', 'fonts', 'myicons', 'svg', 'img', 'nc-icons.svg'));
 
 xml2js.parseString(data.toString(), (err, result) => {
   if (err !== null) {
@@ -108,15 +108,15 @@ xml2js.parseString(data.toString(), (err, result) => {
     return;
   }
   result.svg.symbol = result.svg.symbol.map(sym => {
-    const res = Object.assign(_.omit(sym, ['title']), {
+    let res = Object.assign(_.omit(sym, ['title']), {
       $: transformAttributes(sym.$),
     });
-    const doDecolorize = decolorize.has(sym.$.id);
+    let doDecolorize = decolorize.has(sym.$.id);
     res.g[0].g = res.g[0].g.map(g => transformG(g, doDecolorize));
 
     return res;
   });
-  const builder = new xml2js.Builder();
+  let builder = new xml2js.Builder();
   fs.writeFileSync(path.join('..', 'assets', 'fonts', 'vortex.svg'), builder.buildObject(result));
   // console.log('res', require('util').inspect(result, { depth: 1000 }));
 });
