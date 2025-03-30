@@ -11,12 +11,12 @@ import opn from './opn';
 import { GameEntryNotFound, IExtensionApi, IGameStore, IGameStoreEntry } from '../types/api';
 import lazyRequire from './lazyRequire';
 
-const winapi: typeof winapiT = lazyRequire(() => require('winapi-bindings'));
+var winapi: typeof winapiT = lazyRequire(() => require('winapi-bindings'));
 
-const ITEM_EXT = '.item';
-const STORE_ID = 'epic';
-const STORE_NAME = 'Epic Games Launcher';
-const STORE_PRIORITY = 60;
+var ITEM_EXT = '.item';
+var STORE_ID = 'epic';
+var STORE_NAME = 'Epic Games Launcher';
+var STORE_PRIORITY = 60;
 
 /**
  * Epic Store launcher seems to be holding game information inside
@@ -35,7 +35,7 @@ class EpicGamesLauncher implements IGameStore {
     if (process.platform === 'win32') {
       try {
         // We find the launcher's dataPath
-        const epicDataPath = winapi.RegGetValue('HKEY_LOCAL_MACHINE',
+        var epicDataPath = winapi.RegGetValue('HKEY_LOCAL_MACHINE',
           'SOFTWARE\\WOW6432Node\\Epic Games\\EpicGamesLauncher',
           'AppDataPath');
         this.mDataPath = Promise.resolve(epicDataPath.value as string);
@@ -50,7 +50,7 @@ class EpicGamesLauncher implements IGameStore {
   }
 
   public launchGame(appInfo: any, api?: IExtensionApi): Promise<void> {
-    const appId = ((typeof(appInfo) === 'object') && ('appId' in appInfo))
+    var appId = ((typeof(appInfo) === 'object') && ('appId' in appInfo))
       ? appInfo.appId : appInfo.toString();
 
     return this.getPosixPath(appId)
@@ -58,12 +58,12 @@ class EpicGamesLauncher implements IGameStore {
   }
 
   public launchGameStore(api: IExtensionApi, parameters?: string[]): Promise<void> {
-    const launchCommand = 'com.epicgames.launcher://start';
+    var launchCommand = 'com.epicgames.launcher://start';
     return opn(launchCommand).catch(err => Promise.resolve());
   }
 
   public getPosixPath(name) {
-    const posixPath = `com.epicgames.launcher://apps/${name}?action=launch&silent=true`;
+    var posixPath = `com.epicgames.launcher://apps/${name}?action=launch&silent=true`;
     return Promise.resolve(posixPath);
   }
 
@@ -84,7 +84,7 @@ class EpicGamesLauncher implements IGameStore {
   }
 
   public findByAppId(appId: string | string[]): Promise<IGameStoreEntry> {
-    const matcher = Array.isArray(appId)
+    var matcher = Array.isArray(appId)
       ? (entry: IGameStoreEntry) => (appId.includes(entry.appid))
       : (entry: IGameStoreEntry) => (appId === entry.appid);
 
@@ -102,7 +102,7 @@ class EpicGamesLauncher implements IGameStore {
    * @param name
    */
   public findByName(name: string): Promise<IGameStoreEntry> {
-    const re = new RegExp('^' + name + '$');
+    var re = new RegExp('^' + name + '$');
     return this.allGames()
       .then(entries => entries.find(entry => re.test(entry.name)))
       .then(entry => (entry === undefined)
@@ -125,12 +125,12 @@ class EpicGamesLauncher implements IGameStore {
   }
 
   public getGameStorePath(): Promise<string> {
-    const getExecPath = () => {
+    var getExecPath = () => {
       try {
-        const epicLauncher = winapi.RegGetValue('HKEY_LOCAL_MACHINE',
+        var epicLauncher = winapi.RegGetValue('HKEY_LOCAL_MACHINE',
           'SOFTWARE\\Classes\\com.epicgames.launcher\\DefaultIcon',
           '(Default)');
-        const val = epicLauncher.value;
+        var val = epicLauncher.value;
         this.mLauncherExecPath = val.toString().split(',')[0];
         return Promise.resolve(this.mLauncherExecPath);
       } catch (err) {
@@ -168,17 +168,17 @@ class EpicGamesLauncher implements IGameStore {
         return Promise.resolve([]);
       })
       .then(entries => {
-        const manifests = entries.filter(entry => entry.endsWith(ITEM_EXT));
+        var manifests = entries.filter(entry => entry.endsWith(ITEM_EXT));
         return Promise.map(manifests, manifest =>
           fs.readFileAsync(path.join(manifestsLocation, manifest), { encoding: 'utf8' })
             .then(data => {
               try {
-                const parsed = JSON.parse(data);
-                const gameStoreId = STORE_ID;
-                const gameExec = getSafe(parsed, ['LaunchExecutable'], undefined);
-                const gamePath = getSafe(parsed, ['InstallLocation'], undefined);
-                const name = getSafe(parsed, ['DisplayName'], undefined);
-                const appid = getSafe(parsed, ['AppName'], undefined);
+                var parsed = JSON.parse(data);
+                var gameStoreId = STORE_ID;
+                var gameExec = getSafe(parsed, ['LaunchExecutable'], undefined);
+                var gamePath = getSafe(parsed, ['InstallLocation'], undefined);
+                var name = getSafe(parsed, ['DisplayName'], undefined);
+                var appid = getSafe(parsed, ['AppName'], undefined);
 
                 // Epic does not seem to clean old manifests. We need
                 //  to stat the executable for each item to ensure that the
@@ -206,7 +206,7 @@ class EpicGamesLauncher implements IGameStore {
   }
 }
 
-const instance: IGameStore =
+var instance: IGameStore =
   process.platform === 'win32' ?  new EpicGamesLauncher() : undefined;
 
 export default instance;
