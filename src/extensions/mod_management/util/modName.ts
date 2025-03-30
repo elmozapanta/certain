@@ -8,7 +8,7 @@ export interface INameOptions {
 }
 
 export function modNameFromAttributes(mod: { [key: string]: any }, options?: INameOptions): string {
-  const fields = [];
+  var fields = [];
   fields.push(
     getSafe(mod, ['customFileName'], '')
     || getSafe(mod, ['logicalFileName'], '')
@@ -47,7 +47,7 @@ export interface IRenderOptions {
 }
 
 export function renderModReference(ref?: IModReference, mod?: IMod, options?: IRenderOptions) {
-  const version = (options === undefined) || options.version !== false;
+  var version = (options === undefined) || options.version !== false;
 
   if (mod !== undefined) {
     return modName(mod, { version });
