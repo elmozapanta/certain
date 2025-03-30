@@ -6,7 +6,7 @@ import todos from './todos';
 
 import { TFunction } from 'i18next';
 
-const extTodos: IToDo[] = [];
+let extTodos: IToDo[] = [];
 
 function init(context: IExtensionContext): boolean {
   context.registerReducer(['settings', 'firststeps'], settingsReducer);
@@ -24,16 +24,16 @@ function init(context: IExtensionContext): boolean {
   };
 
   context.registerDashlet('ToDo List', 3, 2, 0, Dashlet, state => {
-    const allTodos: IToDo[] = [].concat(todos(context.api), extTodos);
-    const steps = state.settings.firststeps.steps;
+    let allTodos: IToDo[] = [].concat(todos(context.api), extTodos);
+    let steps = state.settings.firststeps.steps;
 
-    const visibleSteps = allTodos.filter(item => {
+    let visibleSteps = allTodos.filter(item => {
         if (steps[item.id]) {
           return false;
         }
 
         if (item.condition) {
-          const props = item.props ? item.props(state) : {};
+          let props = item.props ? item.props(state) : {};
           return item.condition(props);
         } else {
           return true;
