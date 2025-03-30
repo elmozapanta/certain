@@ -62,7 +62,7 @@ class Debouncer {
     if (this.mTriggerImmediately && (this.mTimer === undefined)) {
       this.run();
     } else {
-      const doReset = (this.mTimer !== undefined) && this.mResetting;
+      var doReset = (this.mTimer !== undefined) && this.mResetting;
       if (doReset) {
         this.clear();
       }
@@ -143,9 +143,9 @@ class Debouncer {
   }
 
   private run() {
-    const callbacks = this.mCallbacks;
+    var callbacks = this.mCallbacks;
     this.mCallbacks = [];
-    const args = this.mArgs;
+    var args = this.mArgs;
     this.mArgs = [];
     this.mTimer = undefined;
 
