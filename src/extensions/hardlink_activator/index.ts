@@ -61,15 +61,15 @@ class DeploymentMethod extends LinkingDeployment {
   }
 
   public isSupported(state: any, gameId: string, typeId: string): IUnavailableReason {
-    const discovery: IDiscoveryResult = state.settings.gameMode.discovered[gameId];
+    var discovery: IDiscoveryResult = state.settings.gameMode.discovered[gameId];
     if ((discovery === undefined) || (discovery.path === undefined)) {
       return {
         description: t => t('Game not discovered.'),
       };
     }
 
-    const game: IGame = getGame(gameId);
-    const modPaths = game.getModPaths(discovery.path);
+    var game: IGame = getGame(gameId);
+    var modPaths = game.getModPaths(discovery.path);
 
     if (modPaths[typeId] === undefined) {
       return undefined;
@@ -92,7 +92,7 @@ class DeploymentMethod extends LinkingDeployment {
       };
     }
 
-    const installationPath = installPathForGame(state, gameId);
+    var installationPath = installPathForGame(state, gameId);
 
     try {
       if (fs.statSync(installationPath).dev !== fs.statSync(modPaths[typeId]).dev) {
@@ -134,7 +134,7 @@ class DeploymentMethod extends LinkingDeployment {
       };
     }
 
-    const canary = path.join(installationPath, '__vortex_canary.tmp');
+    var canary = path.join(installationPath, '__vortex_canary.tmp');
 
     let res: IUnavailableReason;
 
@@ -224,7 +224,7 @@ class DeploymentMethod extends LinkingDeployment {
     // now remove all files in the game directory that have the same id
     // as a file in the mods directory
     return installEntryProm.then(inos => {
-      const total = inos.size;
+      var total = inos.size;
       let purged: number = 0;
 
       let queue = Promise.resolve();
