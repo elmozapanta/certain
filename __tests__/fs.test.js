@@ -1,4 +1,4 @@
-let mockData;
+const mockData;
 
 jest.mock('fs-extra', () => ({
   readFile: (dat) => {
