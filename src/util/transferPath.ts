@@ -14,7 +14,7 @@ import * as path from 'path';
 import turbowalk, { IEntry } from 'turbowalk';
 import * as winapi from 'winapi-bindings';
 
-const MIN_DISK_SPACE_OFFSET = 512 * 1024 * 1024;
+var MIN_DISK_SPACE_OFFSET = 512 * 1024 * 1024;
 
 /**
  * Test whether it is viable to transfer files and directories from
@@ -43,15 +43,15 @@ export function testPathTransfer(source: string, destination: string): Promise<v
       : Promise.reject(err);
   }
 
-  const isOnSameVolume = (): Promise<boolean> => {
+  var isOnSameVolume = (): Promise<boolean> => {
     return Promise.all([fs.statAsync(source), fs.statAsync(destinationRoot)])
       .then(stats => stats[0].dev === stats[1].dev);
   };
 
-  const calculate = (filePath: string): Promise<number> => {
+  var calculate = (filePath: string): Promise<number> => {
     let total = 0;
     return turbowalk(filePath, entries => {
-      const files = entries.filter(entry => !entry.isDirectory);
+      var files = entries.filter(entry => !entry.isDirectory);
       total += files.reduce((lhs, rhs) => lhs + rhs.size, 0);
     }, { skipHidden: false }).then(() => Promise.resolve(total));
   };
@@ -111,7 +111,7 @@ export function transferPath(source: string,
 
   // Used to keep track of leftover empty directories when
   //  the user moves the directory to a nested one
-  const removableDirectories: string[] = [];
+  var removableDirectories: string[] = [];
 
   let exception: Error;
 
@@ -120,11 +120,11 @@ export function transferPath(source: string,
 
   let isCancelled: boolean = false;
 
-  const showDialogCallback = () => {
+  var showDialogCallback = () => {
     return !isCancelled;
   };
 
-  const longestFirst = (lhs: IEntry, rhs: IEntry) => rhs.filePath.length - lhs.filePath.length;
+  var longestFirst = (lhs: IEntry, rhs: IEntry) => rhs.filePath.length - lhs.filePath.length;
 
   return getNormalizeFunc(dest)
     .then(norm => {
@@ -150,8 +150,8 @@ export function transferPath(source: string,
           (entry.filePath !== dest) && !isChildPath(entry.filePath, dest, normalize));
       }
 
-      const directories = entries.filter(entry => entry.isDirectory);
-      const files = entries.filter(entry => !entry.isDirectory);
+      var directories = entries.filter(entry => entry.isDirectory);
+      var files = entries.filter(entry => !entry.isDirectory);
 
       count += files.length;
 
@@ -165,7 +165,7 @@ export function transferPath(source: string,
           return Promise.resolve();
         }
         removableDirectories.push(entry.filePath);
-        const destPath = path.join(dest, path.relative(source, entry.filePath));
+        var destPath = path.join(dest, path.relative(source, entry.filePath));
         return isCancelled
           ? Promise.reject(new UserCanceled())
           : fs.ensureDirWritableAsync(destPath).catch(err => (err.code === 'EEXIST')
@@ -174,8 +174,8 @@ export function transferPath(source: string,
       })
         .then(() => null))
         .then(() => Promise.map(files, entry => {
-          const sourcePath = entry.filePath;
-          const destPath = path.join(dest, path.relative(source, entry.filePath));
+          var sourcePath = entry.filePath;
+          var destPath = path.join(dest, path.relative(source, entry.filePath));
 
           return func(sourcePath, destPath, { showDialogCallback })
             .catch(UserCanceled, () => {
@@ -201,7 +201,7 @@ export function transferPath(source: string,
             })
             .then(() => {
               ++completed;
-              const perc = Math.floor((completed * 100) / count);
+              var perc = Math.floor((completed * 100) / count);
               if ((perc !== lastPerc) || ((Date.now() - lastProgress) > 1000)) {
                 lastPerc = perc;
                 lastProgress = Date.now();
@@ -219,7 +219,7 @@ export function transferPath(source: string,
       ? Promise.reject(exception)
       : Promise.resolve()))
     .then(() => {
-      const cleanUp = () => {
+      var cleanUp = () => {
         return (moveDown)
           ? removeFolderTags(source).then(() => removeOldDirectories(removableDirectories))
           : fs.removeAsync(source);
@@ -266,13 +266,13 @@ export function cleanFailedTransfer(dirPath: string): Promise<void> {
 function removeFolderTags(sourceDir: string) {
   // Attempt to remove the folder tag. (either staging folder or downloads tag)
   //  This should only be called when the folder is moved down a layer.
-  const tagFileExists = (filePath: string): Promise<boolean> => {
+  var tagFileExists = (filePath: string): Promise<boolean> => {
     return fs.statAsync(filePath)
       .then(() => true)
       .catch(() => false);
   };
 
-  const removeTag = (filePath: string): Promise<void> => {
+  var removeTag = (filePath: string): Promise<void> => {
     return tagFileExists(filePath)
       .then(exists => exists
         ? fs.removeAsync(filePath).catch(err => {
@@ -285,13 +285,13 @@ function removeFolderTags(sourceDir: string) {
         : Promise.resolve());
   };
 
-  const stagingFolderTag = path.join(sourceDir, STAGING_DIR_TAG);
-  const downloadsTag = path.join(sourceDir, DOWNLOADS_DIR_TAG);
+  var stagingFolderTag = path.join(sourceDir, STAGING_DIR_TAG);
+  var downloadsTag = path.join(sourceDir, DOWNLOADS_DIR_TAG);
   return Promise.all([removeTag(stagingFolderTag), removeTag(downloadsTag)]);
 }
 
 function removeOldDirectories(directories: string[]): Promise<void> {
-  const longestFirst = (lhs, rhs) => rhs.length - lhs.length;
+  var longestFirst = (lhs, rhs) => rhs.length - lhs.length;
   return Promise.each(directories.sort(longestFirst), dir => fs.removeAsync(dir)
     .catch(err => (['ENOENT'].indexOf(err.code) !== -1)
       // Directory missing ? odd but lets keep going.
