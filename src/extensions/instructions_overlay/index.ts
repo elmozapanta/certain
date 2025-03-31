@@ -6,9 +6,9 @@ import Reducer from './reducer';
 import { IOverlayOptions, IPosition } from '../../types/IState';
 
 function init(context: IExtensionContext): boolean {
-  const onClose = (id: string) => {
-    const state = context.api.getState();
-    const overlayInfo = state.session.overlays.overlays[id];
+  let onClose = (id: string) => {
+    let state = context.api.getState();
+    let overlayInfo = state.session.overlays.overlays[id];
     context.api.store.dispatch(dismissOverlay(id));
     context.api.events.emit('did-dismiss-overlay', id, overlayInfo.options?.id);
   }
