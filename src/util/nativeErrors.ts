@@ -5,7 +5,7 @@ export interface IDecoded {
 }
 
 export function decodeSystemError(err: Error, filePath: string): IDecoded {
-  const code = err['systemCode'] ?? err['nativeCode'];
+  let code = err['systemCode'] ?? err['nativeCode'];
 
   if ((code === undefined) || (process.platform !== 'win32')) {
     return undefined;
