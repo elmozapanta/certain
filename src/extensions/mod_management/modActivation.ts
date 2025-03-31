@@ -69,8 +69,8 @@ function deployMods(api: IExtensionApi,
         if (progressCB !== undefined) {
           progressCB(renderModName(mod), Math.round((idx * 50) / length));
         }
-        const modPath = path.join(installationPath, mod.installationPath);
-        const overrides = new Set<string>(skipFiles);
+        var modPath = path.join(installationPath, mod.installationPath);
+        var overrides = new Set<string>(skipFiles);
         if (mod.fileOverrides !== undefined) {
           mod.fileOverrides.map(file => path.relative(destinationPath, file))
                            .forEach(file => overrides.add(normalize(file)));
@@ -81,7 +81,7 @@ function deployMods(api: IExtensionApi,
       }
     }))
     .then(() => {
-      const mergePath = truthy(typeId)
+      var mergePath = truthy(typeId)
         ? MERGED_PATH + '.' + typeId
         : MERGED_PATH;
 
@@ -94,7 +94,7 @@ function deployMods(api: IExtensionApi,
       }
     })
     .then(() => {
-      const cb = progressCB === undefined
+      var cb = progressCB === undefined
         ? undefined
         : (files: number, total: number) =>
             progressCB(`${files}/${total} files`, 50 + (files * 50) / total);
