@@ -4,7 +4,7 @@ import walk from './walk';
 
 function calculateFolderSize(dirPath: string): Bluebird<number> {
   let totalSize = 0;
-  const onIter = (walkPath, iter, stats) => {
+  var onIter = (walkPath, iter, stats) => {
     if (stats.isFile()) {
       totalSize += stats.size;
     }
