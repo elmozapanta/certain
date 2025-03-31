@@ -1,10 +1,10 @@
-const lockfile = require('@yarnpkg/lockfile');
-const fs = require('fs');
+var lockfile = require('@yarnpkg/lockfile');
+var fs = require('fs');
 
-const develLock = lockfile.parse(fs.readFileSync('yarn.lock', { encoding: 'utf8' })).object;
-const develPackage = JSON.parse(fs.readFileSync('package.json', { encoding: 'utf8' })).dependencies;
-const releaseLock = lockfile.parse(fs.readFileSync('app/yarn.lock', { encoding: 'utf8' })).object;
-const releasePackage = JSON.parse(fs.readFileSync('app/package.json', { encoding: 'utf8' })).dependencies;
+var develLock = lockfile.parse(fs.readFileSync('yarn.lock', { encoding: 'utf8' })).object;
+var develPackage = JSON.parse(fs.readFileSync('package.json', { encoding: 'utf8' })).dependencies;
+var releaseLock = lockfile.parse(fs.readFileSync('app/yarn.lock', { encoding: 'utf8' })).object;
+var releasePackage = JSON.parse(fs.readFileSync('app/package.json', { encoding: 'utf8' })).dependencies;
 
 function checkVersions() {
   let valid = true;
@@ -14,13 +14,13 @@ function checkVersions() {
       return;
     }
 
-    const id = key.split('@');
+    var id = key.split('@');
     if (releasePackage[id[0]] !== id[1]) {
       // only check the packages we resolve directly
       return;
     }
   
-    const devKey = Object.keys(develLock).find(iter => (id[1].startsWith('file'))
+    var devKey = Object.keys(develLock).find(iter => (id[1].startsWith('file'))
       ? iter.split('@')[0] === id[0]
       : iter === key);
     if (devKey === undefined) {
@@ -63,7 +63,7 @@ function checkRelPackages() {
   return valid;
 }
 
-const success = checkRelPackages() && checkDevPackages() && checkVersions();
+var success = checkRelPackages() && checkDevPackages() && checkVersions();
 
 if (success) {
   console.log('packages are valid');
