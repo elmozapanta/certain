@@ -7,9 +7,9 @@ import encode from 'encoding-down';
 import leveldownT from 'leveldown';
 import * as levelup from 'levelup';
 
-const SEPARATOR: string = '###';
+var SEPARATOR: string = '###';
 
-const READ_TIMEOUT: number = 10000;
+var READ_TIMEOUT: number = 10000;
 
 export class DatabaseLocked extends Error {
   constructor() {
@@ -21,7 +21,7 @@ export class DatabaseLocked extends Error {
 function repairDB(dbPath: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     log('warn', 'repairing database', dbPath);
-    const leveldown: typeof leveldownT = require('leveldown');
+    var leveldown: typeof leveldownT = require('leveldown');
     leveldown.repair(dbPath, (err: Error) => {
       if (err !== null) {
         reject(err);
@@ -34,8 +34,8 @@ function repairDB(dbPath: string): Promise<void> {
 
 function openDB(dbPath: string): Promise<levelup.LevelUp> {
   return new Promise<levelup.LevelUp>((resolve, reject) => {
-    const leveldown: typeof leveldownT = require('leveldown');
-    const db = levelup.default(encode(leveldown(dbPath)),
+    var leveldown: typeof leveldownT = require('leveldown');
+    var db = levelup.default(encode(leveldown(dbPath)),
                      { keyEncoding: 'utf8', valueEncoding: 'utf8' }, (err) => {
       if (err !== null) {
         return reject(err);
@@ -100,7 +100,7 @@ class LevelPersist implements IPersistor {
 
   public getAllKeys(options?: any): Promise<string[][]> {
     return new Promise((resolve, reject) => {
-      const keys: string[][] = [];
+      var keys: string[][] = [];
       let resolved = false;
       this.mDB.createKeyStream(options)
         .on('data', data => {
@@ -123,9 +123,9 @@ class LevelPersist implements IPersistor {
 
   public getAllKVs(prefix?: string): Promise<Array<{ key: string[], value: string }>> {
     return new Promise((resolve, reject) => {
-      const kvs: Array<{ key: string[], value: string }> = [];
+      var kvs: Array<{ key: string[], value: string }> = [];
 
-      const options = (prefix === undefined)
+      var options = (prefix === undefined)
         ? undefined
         : {
           gt: `${prefix}${SEPARATOR}`,
@@ -179,7 +179,7 @@ class LevelPersist implements IPersistor {
   private restackingFunc<T extends (...args: unknown[]) => any>(cb: T)
       : (...args: Parameters<T>) => ReturnType<T> {
     return (...args: Parameters<T>): ReturnType<T> => {
-      const stackErr = new Error();
+      var stackErr = new Error();
       return cb(...args)
         .catch(err => {
           err.stack = stackErr.stack;
