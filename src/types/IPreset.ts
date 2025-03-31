@@ -1,4 +1,4 @@
-const StepTypeList = ['commandline', 'hydrate', 'setgame', 'installmod', 'restart', 'login_nexus'] as const;
+let StepTypeList = ['commandline', 'hydrate', 'setgame', 'installmod', 'restart', 'login_nexus'] as let;
 
 export type PresetStepType = typeof StepTypeList[number];
 
