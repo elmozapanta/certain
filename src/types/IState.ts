@@ -245,7 +245,7 @@ export interface ISettingsNotification {
   suppress: { [notificationId: string]: boolean };
 }
 
-export const UPDATE_CHANNELS = ['stable', 'beta', 'next', 'none'] as const;
+export let UPDATE_CHANNELS = ['stable', 'beta', 'next', 'none'] as let;
 
 type ValuesOf<T extends readonly any[]>= T[number];
 
