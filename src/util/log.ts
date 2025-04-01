@@ -8,7 +8,7 @@ import * as util from 'util';
 import winston from 'winston';
 
 export function valueReplacer() {
-  const known = new Map();
+  let known = new Map();
 
   return (key: string, value: any) => {
     if (typeof(value) === 'object') {
@@ -38,7 +38,7 @@ let logger: typeof winston = null;
 // to the main-process logger through ipc
 if ((process as any).type === 'renderer') {
   // tslint:disable-next-line:no-var-requires
-  const { ipcRenderer } = require('electron');
+  let { ipcRenderer } = require('electron');
   IPCTransport.prototype.log =
     (level: string, message: string, meta: any[], callback: winston.LogCallback) => {
       ipcRenderer.send('log-message', level, message,
@@ -65,12 +65,12 @@ if ((process as any).type === 'renderer') {
     logger = (global as any).logger;
   }
   // tslint:disable-next-line:no-var-requires
-  const { ipcMain } = require('electron');
+  let { ipcMain } = require('electron');
   if (ipcMain !== undefined) {
     ipcMain.on('log-message',
       (event, level: LogLevel, message: string, metadataSer?: string) => {
         try {
-          const metadata = (metadataSer !== undefined)
+          let metadata = (metadataSer !== undefined)
             ? JSON.parse(metadataSer)
             : undefined;
           logger.log(level, message, metadata);
