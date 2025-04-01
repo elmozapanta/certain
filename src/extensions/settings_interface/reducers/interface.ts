@@ -7,7 +7,7 @@ import update from 'immutability-helper';
 /**
  * reducer for changes to interface settings
  */
-const settingsReducer: IReducerSpec = {
+let settingsReducer: IReducerSpec = {
   reducers: {
     [actions.setLanguage as any]: (state, payload) =>
       update(state, { language: { $set: payload } }),
