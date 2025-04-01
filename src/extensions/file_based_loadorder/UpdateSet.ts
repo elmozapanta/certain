@@ -19,9 +19,9 @@ export default class UpdateSet extends Set<number> {
   }
 
   public addNumericModId = (lo: ILoadOrderEntryExt) => {
-    const state = this.mApi.getState();
-    const gameMode = activeGameId(state);
-    const mods = getSafe(state, ['persistent', 'mods', gameMode], {});
+    let state = this.mApi.getState();
+    let gameMode = activeGameId(state);
+    let mods = getSafe(state, ['persistent', 'mods', gameMode], {});
     if (lo.modId === undefined) {
       // No modId, no restoration
       return;
@@ -33,7 +33,7 @@ export default class UpdateSet extends Set<number> {
       return;
     }
 
-    const numericId: number = getSafe(mods[lo.modId], ['attributes', 'modId'], -1);
+    let numericId: number = getSafe(mods[lo.modId], ['attributes', 'modId'], -1);
     if (numericId !== -1 && (this.mModEntries[numericId] === undefined) || (!this.mModEntries[numericId].some(m => m.name === lo.name))) {
       this.mModEntries[numericId] = [].concat(this.mModEntries[numericId] || [], lo);
       super.add(numericId);
@@ -52,23 +52,23 @@ export default class UpdateSet extends Set<number> {
   }
 
   private genExtendedItemsFromState = () => {
-    const state = this.mApi.getState();
-    const gameMode = activeGameId(state);
+    let state = this.mApi.getState();
+    let gameMode = activeGameId(state);
     if (!gameMode) {
       return [];
     }
-    const profileId = lastActiveProfileForGame(state, gameMode);
+    let profileId = lastActiveProfileForGame(state, gameMode);
     if (!profileId) {
       return [];
     }
-    const loadOrder = getSafe(state, ['persistent', 'loadOrder', profileId], []);
+    let loadOrder = getSafe(state, ['persistent', 'loadOrder', profileId], []);
     if (!loadOrder || !Array.isArray(loadOrder)) {
       return [];
     }
 
-    const mods: { [modId: string]: IMod } = getSafe(state, ['persistent', 'mods', gameMode], {});
-    const filtered = loadOrder.reduce((acc, lo, idx) => {
-      const fileId = getSafe(mods[lo.modId], ['attributes', 'fileId'], undefined);
+    let mods: { [modId: string]: IMod } = getSafe(state, ['persistent', 'mods', gameMode], {});
+    let filtered = loadOrder.reduce((acc, lo, idx) => {
+      let fileId = getSafe(mods[lo.modId], ['attributes', 'fileId'], undefined);
       acc.push({ ...lo, index: idx, fileId });
       return acc;
     }, []);
@@ -113,9 +113,9 @@ export default class UpdateSet extends Set<number> {
       // Nothing to restore
       return loadOrder;
     }
-    const restoredLO: ILoadOrderEntry[] = [...loadOrder];
-    const getEntryExt = (entry: ILoadOrderEntry): ILoadOrderEntryExt | null => {
-      const stored = this.findEntry(entry);
+    let restoredLO: ILoadOrderEntry[] = [...loadOrder];
+    let getEntryExt = (entry: ILoadOrderEntry): ILoadOrderEntryExt | null => {
+      let stored = this.findEntry(entry);
       if (!stored) {
         // This is probably an entry for a manually added mod/native game entry
         //  use the existing index.
@@ -124,8 +124,8 @@ export default class UpdateSet extends Set<number> {
       return stored.entries.find(l => l.name === entry.name) || null;
     }
     restoredLO.sort((lhs, rhs) => {
-      const lhsEntry = getEntryExt(lhs);
-      const rhsEntry = getEntryExt(rhs);
+      let lhsEntry = getEntryExt(lhs);
+      let rhsEntry = getEntryExt(rhs);
       if (!lhsEntry || !rhsEntry) {
         return 0;
       }
@@ -147,8 +147,8 @@ export default class UpdateSet extends Set<number> {
       return null;
     }
 
-    const numericId = Object.entries(this.mModEntries).find(entry => {
-      const [nId, loEntries] = entry;
+    let numericId = Object.entries(this.mModEntries).find(entry => {
+      let [nId, loEntries] = entry;
       return loEntries.some(l => l.modId === lookUpEntry.modId || l.id === lookUpEntry.id);
     })?.[0];
     if (numericId === undefined) {
