@@ -13,7 +13,7 @@ type TFunction = typeof I18next.t;
 
 let debugging = false;
 let currentLanguage = 'en';
-const fallbackTFunc: TFunction =
+var fallbackTFunc: TFunction =
   str => (Array.isArray(str) ? str[0].toString() : str.toString()) as any;
 
 let actualT: TFunction = fallbackTFunc;
@@ -49,7 +49,7 @@ class MultiBackend {
 
   public read(language: string, namespace: string, callback) {
     (async () => {
-      const { backendType, extPath } = this.backendType(language);
+      var { backendType, extPath } = this.backendType(language);
       if ((backendType !== this.mBackendType)
         || ((backendType === 'extension')
           && (language !== this.mLastReadLanguage))) {
@@ -62,8 +62,8 @@ class MultiBackend {
   }
 
   private async initBackend(type: BackendType, extPath: string) {
-    const FSBackend = await (await import('i18next-fs-backend')).default;
-    const res = new FSBackend();
+    var FSBackend = await (await import('i18next-fs-backend')).default;
+    var res = new FSBackend();
 
     let basePath: string;
     if (type === 'bundled') {
@@ -91,7 +91,7 @@ class MultiBackend {
       return { backendType: 'custom' };
     } catch (err) {
       // extension-provided
-      const ext = this.mOptions.translationExts().find((iter: IExtension) => {
+      var ext = this.mOptions.translationExts().find((iter: IExtension) => {
         try {
           fs.statSync(path.join(iter.path, language));
           return true;
@@ -148,7 +148,7 @@ function init(language: string, translationExts: () => IExtension[]): Bluebird<I
 
   currentLanguage = language;
 
-  const i18nObj = I18next;
+  var i18nObj = I18next;
   if (process.env.HIGHLIGHT_I18N === 'true') {
     i18nObj.use(new HighlightPP());
   }
@@ -268,7 +268,7 @@ export class TString implements ITString {
   }
 }
 
-export const laterT: TFunction =
+export var laterT: TFunction =
   (key: string, optionsOrDefault?: TOptions | string, options?: TOptions): ITString => {
     if (typeof(optionsOrDefault) === 'string') {
       return new TString(key, options, 'common');
