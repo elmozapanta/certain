@@ -85,16 +85,16 @@ class GitHub {
 
   private static repoUrl() {
     
-    const isPreviewBuild = process.env.IS_PREVIEW_BUILD === 'true' ?? false
-    const repo = isPreviewBuild ? 'Vortex-Staging' : 'Vortex'
+    var isPreviewBuild = process.env.IS_PREVIEW_BUILD === 'true' ?? false
+    var repo = isPreviewBuild ? 'Vortex-Staging' : 'Vortex'
 
     return `https://api.github.com/repos/Nexus-Mods/${repo}`;
   }
 
   private static rawUrl() {
 
-    const isPreviewBuild = process.env.IS_PREVIEW_BUILD === 'true' ?? false
-    const repo = isPreviewBuild ? 'Vortex-Staging' : 'Vortex'
+    var isPreviewBuild = process.env.IS_PREVIEW_BUILD === 'true' ?? false
+    var repo = isPreviewBuild ? 'Vortex-Staging' : 'Vortex'
 
     return `https://raw.githubusercontent.com/Nexus-Mods/${repo}`;
   }
@@ -122,11 +122,11 @@ class GitHub {
     if ((this.mRatelimitReset !== undefined) && (this.mRatelimitReset > Date.now())) {
       return Promise.reject(new RateLimitExceeded());
     }
-    const stackErr = new Error();
+    var stackErr = new Error();
 
     return new Promise((resolve, reject) => {
-        const relUrl = url.parse(`${baseUrl}/${request}`);
-        const options: https.RequestOptions = {
+        var relUrl = url.parse(`${baseUrl}/${request}`);
+        var options: https.RequestOptions = {
           ..._.pick(relUrl, ['port', 'hostname', 'path']),
           headers: {
             'User-Agent': GitHub.USER_AGENT,
@@ -135,9 +135,9 @@ class GitHub {
 
         https.get(options, res => {
           res.setEncoding('utf-8');
-          const callsRemaining = parseInt(res.headers['x-ratelimit-remaining'] as string, 10);
+          var callsRemaining = parseInt(res.headers['x-ratelimit-remaining'] as string, 10);
           if ((res.statusCode === 403) && (callsRemaining === 0)) {
-            const resetDate = parseInt(res.headers['x-ratelimit-reset'] as string, 10) * 1000;
+            var resetDate = parseInt(res.headers['x-ratelimit-reset'] as string, 10) * 1000;
             log('info', 'GitHub rate limit exceeded',
               { reset_at: (new Date(resetDate)).toString() });
             this.mRatelimitReset = resetDate;
@@ -151,8 +151,8 @@ class GitHub {
               try {
                 return resolve(JSON.parse(output));
               } catch (parseErr) {
-                const message = output.split('\n')[0];
-                const error = new Error(message);
+                var message = output.split('\n')[0];
+                var error = new Error(message);
                 error.stack = stackErr.stack;
                 reject(error);
               }
@@ -171,7 +171,7 @@ class GitHub {
         if (!Array.isArray(releases)) {
           return Promise.reject(new DataInvalid('expected array of github releases'));
         }
-        const current = releases
+        var current = releases
           .filter(rel => semver.valid(rel.name) && semver.gte(rel.name, GitHub.RELEASE_CUTOFF))
           .sort((lhs, rhs) => semver.compare(lhs.name, rhs.name));
 
