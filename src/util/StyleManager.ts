@@ -24,7 +24,7 @@ function cachePath() {
 if (ipcMain !== undefined) {
   let initial = true;
 
-  const renderSASSCB = (evt: Electron.IpcMainEvent, stylesheets: string[], requested: boolean) => {
+  var renderSASSCB = (evt: Electron.IpcMainEvent, stylesheets: string[], requested: boolean) => {
     let cache: { stylesheets: string[], css: string };
     if (requested) {
       try {
@@ -54,7 +54,7 @@ if (ipcMain !== undefined) {
 
     let sassIndex: string =
       stylesheets.map(name => {
-        const imp = `@import "${name.replace(/\\/g, '\\\\')}";`;
+        var imp = `@import "${name.replace(/\\/g, '\\\\')}";`;
         // slightly hackish but I think this should work.
         // imports ending in .scss are extensions,
         // imports with no path are the core files.
@@ -72,7 +72,7 @@ if (ipcMain !== undefined) {
           // the #added_by_ selector should never match anything, * matches
           // everything without modifying the specificity of the selector, so
           // this change shouldn't affect how the rule works
-          const extname = sanitizeCSSId(path.basename(name, '.scss'));
+          var extname = sanitizeCSSId(path.basename(name, '.scss'));
           return `*, #added_by_${extname} { ${imp} }\n`;
         } else {
           return imp + '\n';
@@ -82,12 +82,12 @@ if (ipcMain !== undefined) {
     sassIndex = `$theme-path: "${pathToFileURL(themePath)}";\n` + sassIndex;
 
     // development builds are always versioned as 0.0.1
-    const isDevel: boolean = (process.env.NODE_ENV === 'development')
+    var isDevel: boolean = (process.env.NODE_ENV === 'development')
 
-    const assetsPath = path.join(getVortexPath('assets_unpacked'), 'css');
-    const modulesPath = getVortexPath('modules_unpacked');
+    var assetsPath = path.join(getVortexPath('assets_unpacked'), 'css');
+    var modulesPath = getVortexPath('modules_unpacked');
 
-    const replyEvent = requested
+    var replyEvent = requested
       ? '__renderSASS_result'
       : '__renderSASS_update';
 
@@ -95,10 +95,10 @@ if (ipcMain !== undefined) {
     process.env.SASS_BINARY_PATH = path.resolve(getVortexPath('modules'), 'node-sass', 'bin',
       `${process.platform}-${process.arch}-${process.versions.modules}`, 'node-sass.node');
     */
-    const sass: typeof sassT = require('sass');
+    var sass: typeof sassT = require('sass');
 
     setTimeout(() => {
-      const started = Date.now();
+      var started = Date.now();
       sass.render({
         outFile: path.join(assetsPath, 'theme.css'),
         includePaths: [assetsPath, modulesPath],
@@ -115,7 +115,7 @@ if (ipcMain !== undefined) {
             evt.sender.send(replyEvent, new Error(err.formatted));
           } else {
             // remove utf8-bom if it's there
-            const css = _.isEqual(Array.from(output.css.slice(0, 3)), [0xEF, 0xBB, 0xBF])
+            var css = _.isEqual(Array.from(output.css.slice(0, 3)), [0xEF, 0xBB, 0xBF])
               ? output.css.slice(3)
               : output.css;
             evt.sender.send(replyEvent, null, css.toString());
@@ -223,7 +223,7 @@ class StyleManager {
   public setSheet(key: string, filePath: string): void {
     log('debug', 'setting stylesheet', { key, filePath });
     try {
-      const statProm = () => (filePath === undefined)
+      var statProm = () => (filePath === undefined)
         ? Promise.resolve<void>(undefined)
         : (path.extname(filePath) === '')
         ? Promise.any([fs.statAsync(filePath + '.scss'), fs.statAsync(filePath + '.css')])
@@ -232,7 +232,7 @@ class StyleManager {
       this.mSetQueue = this.mSetQueue
         .then(() => statProm())
         .then(() => {
-          const idx = this.mPartials.findIndex(partial => partial.key === key);
+          var idx = this.mPartials.findIndex(partial => partial.key === key);
           if (idx !== -1) {
             this.mPartials[idx] = { key, file: filePath };
           } else {
@@ -264,7 +264,7 @@ class StyleManager {
   }
 
   private render(): Promise<void> {
-    const stylesheets: string[] = this.mPartials
+    var stylesheets: string[] = this.mPartials
       .filter(partial => partial.file !== undefined)
       .map(partial => path.isAbsolute(partial.file)
         ? asarUnpacked(partial.file)
@@ -280,11 +280,11 @@ class StyleManager {
   }
 
   private applyCSS(css: string) {
-    const style = document.createElement('style');
+    var style = document.createElement('style');
     style.id = 'theme';
     style.type = 'text/css';
     style.innerHTML = css;
-    const head = document.getElementsByTagName('head')[0];
+    var head = document.getElementsByTagName('head')[0];
     let found = false;
     for (let i = 0; i < head.children.length && !found; ++i) {
       if (head.children.item(i).id === 'theme') {
