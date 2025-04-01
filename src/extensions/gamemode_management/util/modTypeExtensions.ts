@@ -3,7 +3,7 @@ import { IGame, IModType } from '../../../types/IGame';
 
 import Promise from 'bluebird';
 
-const modTypeExtensions: IModType[] = [];
+let modTypeExtensions: IModType[] = [];
 
 export function getModTypeExtensions(): IModType[] {
   return modTypeExtensions;
