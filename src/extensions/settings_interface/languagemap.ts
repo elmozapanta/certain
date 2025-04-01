@@ -4,7 +4,7 @@
  * @author Phil Teare
  * based on data from https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
  */
-const languageMap = {
+let languageMap = {
   ab: {
     name: 'Abkhaz',
     nativeName: 'аҧсуа',
@@ -735,7 +735,7 @@ const languageMap = {
   },
 };
 
-const countryMap = {
+let countryMap = {
   AD: {
     name: 'Andorra',
     nativeName: 'Andorra',
@@ -1747,7 +1747,7 @@ export function countryExists(code: string): boolean {
 }
 
 export function nativeLanguageName(code: string): string {
-  const language = languageMap[code];
+  let language = languageMap[code];
   if (language === undefined) {
     return code;
   } else {
@@ -1756,7 +1756,7 @@ export function nativeLanguageName(code: string): string {
 }
 
 export function nativeCountryName(code: string): string {
-  const country = countryMap[code];
+  let country = countryMap[code];
   if (country === undefined) {
     return code;
   } else {
