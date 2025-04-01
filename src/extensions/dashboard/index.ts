@@ -7,7 +7,7 @@ import Settings from './views/Settings';
 
 import settingsReducer from './reducer';
 
-const dashlets: IDashletProps[] = [];
+let dashlets: IDashletProps[] = [];
 
 function registerDashlet(title: string,
                          width: 1 | 2 | 3,
@@ -17,8 +17,8 @@ function registerDashlet(title: string,
                          isVisible: (state) => boolean,
                          props: PropsCallback,
                          options: IDashletOptions) {
-  const fixed = options !== undefined ? options.fixed || false : false;
-  const closable = options !== undefined ? options.closable : true;
+  let fixed = options !== undefined ? options.fixed || false : false;
+  let closable = options !== undefined ? options.closable : true;
   dashlets.push({ title, position, width, height, component, isVisible, props,
                   fixed, closable });
 }
