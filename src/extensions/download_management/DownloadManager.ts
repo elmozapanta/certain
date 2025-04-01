@@ -28,18 +28,18 @@ import * as stream from 'stream';
 import * as url from 'url';
 import * as zlib from 'zlib';
 
-const getCookies = makeRemoteCall('get-cookies',
+var getCookies = makeRemoteCall('get-cookies',
   (electron, webContents, filter: Electron.CookiesGetFilter) => {
     return webContents.session.cookies.get(filter);
 });
 
 // assume urls are valid for at least 5 minutes
-const URL_RESOLVE_EXPIRE_MS = 1000 * 60 * 5;
+var URL_RESOLVE_EXPIRE_MS = 1000 * 60 * 5;
 // don't follow redirects arbitrarily long
-const MAX_REDIRECT_FOLLOW = 5;
+var MAX_REDIRECT_FOLLOW = 5;
 // if we receive no data for this amount of time, reset the connection
-const STALL_TIMEOUT = 15 * 1000;
-const MAX_STALL_RESETS = 2;
+var STALL_TIMEOUT = 15 * 1000;
+var MAX_STALL_RESETS = 2;
 
 export type RedownloadMode = 'always' | 'never' | 'ask' | 'replace';
 
@@ -128,7 +128,7 @@ interface IRunningDownload {
 
 type FinishCallback = (paused: boolean, replaceFileName?: string) => void;
 
-const dummyJob: IDownloadJob = {
+var dummyJob: IDownloadJob = {
   confirmedOffset: 0,
   confirmedReceived: 0,
   confirmedSize: 0,
@@ -149,7 +149,7 @@ const dummyJob: IDownloadJob = {
  */
 class DownloadWorker {
   public static dummy(onAbort: () => void): DownloadWorker {
-    const res = new DownloadWorker(dummyJob,  () => null, () => null, () => null, '', () => null);
+    var res = new DownloadWorker(dummyJob,  () => null, () => null, () => null, '', () => null);
     res.mOnAbort = onAbort;
     res.mEnded = true;
     return res;
@@ -199,7 +199,7 @@ class DownloadWorker {
           // to use it now
           job.received = job.size;
           job.size = 0;
-          const [ignore, fileName] = jobUrl.split('<')[0].split('|');
+          var [ignore, fileName] = jobUrl.split('<')[0].split('|');
           finishCB(false, fileName);
         } else {
           this.assignJob(job, jobUrl);
@@ -272,7 +272,7 @@ class DownloadWorker {
     let parsed: url.UrlWithStringQuery;
     let referer: string;
     try {
-      const [urlIn, refererIn] = jobUrl.split('<');
+      var [urlIn, refererIn] = jobUrl.split('<');
       // at some point in the past we'd encode the uri here which apparently led to double-encoded
       // uris. Then we'd decode it which led to the request failing if there were characters in
       // the url that required encoding.
@@ -290,14 +290,14 @@ class DownloadWorker {
       referer = job.options.referer;
     }
 
-    const lib: IHTTP = parsed.protocol === 'https:' ? https : http;
+    var lib: IHTTP = parsed.protocol === 'https:' ? https : http;
 
-    const allCookies = (electronCookies || [])
+    var allCookies = (electronCookies || [])
       .map(cookie => `${cookie.name}=${cookie.value}`)
       .concat(this.mJob.extraCookies);
 
     try {
-      const headers = {
+      var headers = {
           Range: `bytes=${job.offset}-${job.offset + job.size}`,
           'User-Agent': this.mUserAgent,
           'Accept-Encoding': 'gzip, deflate',
@@ -374,7 +374,7 @@ class DownloadWorker {
     if (this.mRequest !== undefined) {
       if (this.mStallResets <= 0) {
         log('warn', 'giving up on download after repeated stalling with no progress', this.mUrl);
-        const err = new StalledError();
+        var err = new StalledError();
         err['allowReport'] = false;
         return this.handleError(err);
       }
@@ -490,7 +490,7 @@ class DownloadWorker {
     if (response.statusCode >= 300) {
       if (([301, 302, 303, 307, 308].includes(response.statusCode))
           && (this.mRedirectsFollowed < MAX_REDIRECT_FOLLOW)) {
-        const newUrl = url.resolve(jobUrl, response.headers['location'] as string);
+        var newUrl = url.resolve(jobUrl, response.headers['location'] as string);
         log('info', 'redirected', { newUrl, loc: response.headers['location'] });
         this.mJob.url = () => Bluebird.resolve(newUrl);
         this.mRedirected = true;
@@ -518,7 +518,7 @@ class DownloadWorker {
           this.assignJob(this.mJob, newUrl);
         }, 100);
       } else {
-        const err = new HTTPError(response.statusCode, response.statusMessage, jobUrl);
+        var err = new HTTPError(response.statusCode, response.statusMessage, jobUrl);
         err['attachLogOnReport'] = true;
         if (response.statusCode === 429) {
           err['allowReport'] = false;
@@ -535,19 +535,19 @@ class DownloadWorker {
       return;
     }
 
-    const chunkable = 'content-range' in response.headers;
+    var chunkable = 'content-range' in response.headers;
 
     log('debug', 'retrieving range',
         { id: this.mJob.workerId, range: response.headers['content-range'] || 'full' });
     if (this.mJob.responseCB !== undefined) {
-      const chunkSize: number = (response.headers['content-length'] !== undefined)
+      var chunkSize: number = (response.headers['content-length'] !== undefined)
         ? parseInt(response.headers['content-length'] as string, 10)
         : -1;
 
       let fileSize = chunkSize;
       if (chunkable) {
-        const rangeExp: RegExp = /bytes (\d)*-(\d*)\/(\d*)/i;
-        const sizeMatch: string[] = (response.headers['content-range'] as string).match(rangeExp);
+        var rangeExp: RegExp = /bytes (\d)*-(\d*)\/(\d*)/i;
+        var sizeMatch: string[] = (response.headers['content-range'] as string).match(rangeExp);
         if ((sizeMatch?.length ?? 0) > 1) {
           fileSize = parseInt(sizeMatch[3], 10);
         }
@@ -577,7 +577,7 @@ class DownloadWorker {
           cd = 'attachment;' + cd;
         }
         try {
-          const disposition = contentDisposition.parse(cd);
+          var disposition = contentDisposition.parse(cd);
           if (truthy(disposition.parameters['filename'])) {
             fileName = disposition.parameters['filename'];
           }
@@ -592,7 +592,7 @@ class DownloadWorker {
   }
 
   private mergeBuffers = (): Buffer => {
-    const res = Buffer.concat(this.mBuffers);
+    var res = Buffer.concat(this.mBuffers);
     this.mBuffers = [];
     return res;
   }
@@ -602,8 +602,8 @@ class DownloadWorker {
   }
 
   private doWriteBuffer = (buf: Buffer): Bluebird<void> => {
-    const len = buf.length;
-    const res = this.mJob.dataCB(this.mJob.offset, buf)
+    var len = buf.length;
+    var res = this.mJob.dataCB(this.mJob.offset, buf)
       .then(() => {
         this.mJob.confirmedReceived += len;
         this.mJob.confirmedOffset += len;
@@ -630,7 +630,7 @@ class DownloadWorker {
       // we failed to merge the smaller buffers, probably a memory issue.
       log('warn', 'failed to merge buffers', { sizes: this.mBuffers.map(buf => buf.length) });
       // let's try to write the buffers individually
-      const bufs = this.mBuffers;
+      var bufs = this.mBuffers;
       this.mBuffers = [];
       str?.pause?.();
       return Bluebird.mapSeries(bufs, buf => this.doWriteBuffer(buf))
@@ -658,7 +658,7 @@ class DownloadWorker {
     this.mDataHistory.push({ time: Date.now(), size: data.byteLength });
     this.mBuffers.push(data);
 
-    const bufferLength = this.bufferLength;
+    var bufferLength = this.bufferLength;
     if (bufferLength >= DownloadWorker.BUFFER_SIZE) {
       if (!this.mWriting) {
         this.mWriting = true;
@@ -770,7 +770,7 @@ class DownloadManager {
     } catch (err) {
       return Bluebird.reject(new ProcessCanceled(`failed to parse url "${baseUrl}"`));
     }
-    const destPath = destinationPath || this.mDownloadPath;
+    var destPath = destinationPath || this.mDownloadPath;
     let download: IRunningDownload;
     return fs.ensureDirAsync(destPath)
       .then(() => (options.redownload === 'replace')
@@ -838,7 +838,7 @@ class DownloadManager {
       options.redownload = 'always';
     }
     return new Bluebird<IDownloadResult>((resolve, reject) => {
-      const download: IRunningDownload = {
+      var download: IRunningDownload = {
         id,
         origName: path.basename(filePath),
         tempName: filePath,
@@ -859,7 +859,7 @@ class DownloadManager {
         },
         promises: [],
       };
-      const isPending = received === 0;
+      var isPending = received === 0;
       download.chunks = (chunks || [])
         .map((chunk, idx) => this.toJob(download, chunk, isPending && (idx === 0)));
       if (download.chunks.length > 0) {
@@ -884,7 +884,7 @@ class DownloadManager {
    * @memberOf DownloadManager
    */
   public stop = (id: string): boolean => {
-    const download: IRunningDownload = this.mQueue.find(
+    var download: IRunningDownload = this.mQueue.find(
       (value: IRunningDownload) => value.id === id);
     if (download === undefined) {
       log('warn', 'failed to cancel download, not found', { id });
@@ -916,7 +916,7 @@ class DownloadManager {
   }
 
   public pause = (id: string) => {
-    const download: IRunningDownload = this.mQueue.find(
+    var download: IRunningDownload = this.mQueue.find(
       (value: IRunningDownload) => value.id === id);
     if (download === undefined) {
       // this indicates the download isn't queued, so effectively it's already
@@ -926,7 +926,7 @@ class DownloadManager {
     }
     log('info', 'pause download', { id });
 
-    const unfinishedChunks: IChunk[] = [];
+    var unfinishedChunks: IChunk[] = [];
 
     // first, make sure not-yet-started chunks are paused, otherwise
     // they might get started as we stop running chunks as that frees
@@ -965,14 +965,14 @@ class DownloadManager {
                      : Bluebird<IResolvedURL> => {
     if ((this.mResolveCache[input] !== undefined)
       && ((Date.now() - this.mResolveCache[input].time) < URL_RESOLVE_EXPIRE_MS)) {
-      const cache = this.mResolveCache[input];
+      var cache = this.mResolveCache[input];
       return Bluebird.resolve({ urls: cache.urls, meta: cache.meta });
     }
-    const protocol = url.parse(input).protocol;
+    var protocol = url.parse(input).protocol;
     if (!truthy(protocol)) {
       return Bluebird.resolve({ urls: [], meta: {} });
     }
-    const handler = this.mProtocolHandlers[protocol.slice(0, protocol.length - 1)];
+    var handler = this.mProtocolHandlers[protocol.slice(0, protocol.length - 1)];
 
     return (handler !== undefined)
       ? handler(input, name, friendlyName)
@@ -1032,7 +1032,7 @@ class DownloadManager {
             download.urls = resolved.updatedUrls;
           }
           if ((fileNameFromURL === undefined) && (resolved.urls.length > 0)) {
-            const [urlIn, fileName] = resolved.urls[0].split('<')[0].split('|');
+            var [urlIn, fileName] = resolved.urls[0].split('<')[0].split('|');
             fileNameFromURL = (fileName !== undefined)
               ? fileName
               : decodeURI(path.basename(url.parse(urlIn).pathname));
@@ -1055,7 +1055,7 @@ class DownloadManager {
   }
 
   private cancelDownload = (download: IRunningDownload, err: Error) => {
-    for (const chunk of download.chunks) {
+    for (var chunk of download.chunks) {
       if (chunk.state === 'running') {
         if (this.mBusyWorkers[chunk.workerId] !== undefined) {
           this.mBusyWorkers[chunk.workerId].cancel();
@@ -1072,17 +1072,17 @@ class DownloadManager {
     log('info', 'tick dl queue', { freeSpots, queue: this.mQueue.length });
 
     while (freeSpots > 0 && idx < this.mQueue.length) {
-      const queueItem = this.mQueue[idx];
-      const unstartedChunks = queueItem.chunks.filter(chunk => chunk.state === 'init');
+      var queueItem = this.mQueue[idx];
+      var unstartedChunks = queueItem.chunks.filter(chunk => chunk.state === 'init');
 
-      for (const chunk of unstartedChunks) {
+      for (var chunk of unstartedChunks) {
         if (freeSpots <= 0) break;
 
         try {
           await this.startWorker(queueItem);
           --freeSpots;
         } catch (err) {
-          const nowIdx = this.mQueue.indexOf(queueItem);
+          var nowIdx = this.mQueue.indexOf(queueItem);
           if (nowIdx !== -1) {
             this.mQueue[nowIdx].failedCB(err);
             this.mQueue.splice(nowIdx, 1);
@@ -1100,13 +1100,13 @@ class DownloadManager {
   //     let unstartedChunks = countIf(this.mQueue[idx].chunks, value => value.state === 'init');
   //     while ((freeSpots > 0) && (unstartedChunks > 0)) {
   //       --unstartedChunks;
-  //       const queueItem = this.mQueue[idx];
+  //       var queueItem = this.mQueue[idx];
   //       this.startWorker(queueItem)
   //         .then(() => {
   //           --freeSpots;
   //         })
   //         .catch(err => {
-  //           const nowIdx = this.mQueue.indexOf(queueItem);
+  //           var nowIdx = this.mQueue.indexOf(queueItem);
   //           if (nowIdx !== -1) {
   //             this.mQueue[nowIdx].failedCB(err);
   //           }
@@ -1120,10 +1120,10 @@ class DownloadManager {
   // }
 
   private startWorker = (download: IRunningDownload) => {
-    const workerId: number = this.mNextId++;
+    var workerId: number = this.mNextId++;
     this.mSpeedCalculator.initCounter(workerId);
 
-    const job: IDownloadJob = download.chunks.find(ele => ele.state === 'init');
+    var job: IDownloadJob = download.chunks.find(ele => ele.state === 'init');
     job.state = 'running';
     job.workerId = workerId;
 
@@ -1132,7 +1132,7 @@ class DownloadManager {
 
   private makeProgressCB = (job: IDownloadJob, download: IRunningDownload) => {
     return (bytes) => {
-      const starving = this.mSpeedCalculator.addMeasure(job.workerId, bytes);
+      var starving = this.mSpeedCalculator.addMeasure(job.workerId, bytes);
       if (starving) {
         this.mSlowWorkers[job.workerId] = (this.mSlowWorkers[job.workerId] || 0) + 1;
         // only restart slow workers within 15 minutes after starting the download,
@@ -1205,10 +1205,10 @@ class DownloadManager {
       }
       // these values will change until the data was written to file
       // so copy them so we write the correct info to state
-      const receivedNow = download.received;
+      var receivedNow = download.received;
       return download.assembler.addChunk(offset, data)
         .then((synced: boolean) => {
-          const urls: string[] = Array.isArray(download.urls) ? download.urls : undefined;
+          var urls: string[] = Array.isArray(download.urls) ? download.urls : undefined;
           download.received += data.byteLength;
           if (download.received > download.size) {
             download.size = download.received;
@@ -1225,7 +1225,7 @@ class DownloadManager {
         })
         .catch(err => {
           if (!(err instanceof ProcessCanceled)) {
-            for (const chunk of download.chunks) {
+            for (var chunk of download.chunks) {
               if (chunk.state === 'running') {
                 this.mBusyWorkers[chunk.workerId].cancel();
               }
@@ -1254,11 +1254,11 @@ class DownloadManager {
         && (download.finalName === undefined)) {
       // when the download has already been started we ignore the redownload option
       // to determine the correct name
-      const newName = this.unusedName(path.dirname(download.tempName), fileName, 'always');
+      var newName = this.unusedName(path.dirname(download.tempName), fileName, 'always');
       download.finalName = newName;
       newName.then(resolvedName => {
         if (!download.assembler.isClosed()) {
-          const oldTempName = download.tempName;
+          var oldTempName = download.tempName;
           download.tempName = resolvedName;
           return download.assembler.rename(resolvedName)
             .then(() => {
@@ -1298,21 +1298,21 @@ class DownloadManager {
       // download the file in chunks. We use a fixed number of variable size chunks.
       // Since the download link may expire we need to start all threads asap
 
-      const remainingSize = fileSize - this.mMinChunkSize;
+      var remainingSize = fileSize - this.mMinChunkSize;
 
-      const maxChunks = Math.min(this.mMaxChunks, this.mMaxWorkers);
+      var maxChunks = Math.min(this.mMaxChunks, this.mMaxWorkers);
 
-      const chunkSize = Math.min(remainingSize,
+      var chunkSize = Math.min(remainingSize,
           Math.max(this.mMinChunkSize, Math.ceil(remainingSize / maxChunks)));
 
       let offset = this.mMinChunkSize + 1;
       while (offset < fileSize) {
-        const previousChunk = download.chunks.find(chunk => chunk.extraCookies.length > 0);
-        const extraCookies = (previousChunk !== undefined)
+        var previousChunk = download.chunks.find(chunk => chunk.extraCookies.length > 0);
+        var extraCookies = (previousChunk !== undefined)
           ? previousChunk.extraCookies
           : [];
 
-        const minSize = Math.min(chunkSize, fileSize - offset);
+        var minSize = Math.min(chunkSize, fileSize - offset);
         download.chunks.push({
           confirmedReceived: 0,
           confirmedOffset: offset,
@@ -1347,7 +1347,7 @@ class DownloadManager {
 
   private toJob = (download: IRunningDownload, chunk: IChunk, first: boolean): IDownloadJob => {
     let fileNameFromURL: string;
-    const job: IDownloadJob = {
+    var job: IDownloadJob = {
       url: () => download.resolvedUrls().then(resolved => {
         if ((fileNameFromURL === undefined) && (resolved.urls.length > 0)) {
           fileNameFromURL = decodeURI(path.basename(url.parse(resolved.urls[0]).pathname));
@@ -1383,8 +1383,8 @@ class DownloadManager {
     log('debug', 'using existing file for download',
         { download: download.id, fileName, oldName: download.tempName });
     job.state = 'finished';
-    const downloadPath = path.dirname(download.tempName);
-    const filePath = path.join(downloadPath, fileName);
+    var downloadPath = path.dirname(download.tempName);
+    var filePath = path.join(downloadPath, fileName);
     download.assembler.close()
       .then(() => fs.removeAsync(download.tempName)
         .catch(err => (err.code !== 'ENOENT')
@@ -1426,7 +1426,7 @@ class DownloadManager {
       download.error = true;
     }
 
-    const activeChunk = download.chunks.find(
+    var activeChunk = download.chunks.find(
       (chunk: IDownloadJob) => !['paused', 'finished'].includes(chunk.state));
 
     if (activeChunk === undefined) {
@@ -1437,7 +1437,7 @@ class DownloadManager {
             return download.finalName
             .then((resolvedPath: string) => {
               finalPath = resolvedPath;
-              const received = download.chunks.filter(chunk => chunk.state === 'paused')
+              var received = download.chunks.filter(chunk => chunk.state === 'paused')
                 ? download.received
                 : download.size;
               download.progressCB(received, download.size, undefined,
@@ -1465,7 +1465,7 @@ class DownloadManager {
         })
         .then(() => download.resolvedUrls().catch(() => ({ urls: [], meta: {} })))
         .then((resolved: IResolvedURLs) => {
-          const unfinishedChunks = download.chunks
+          var unfinishedChunks = download.chunks
             .filter(chunk => chunk.state === 'paused')
             .map(this.toStoredChunk);
           download.finishCB({
@@ -1512,12 +1512,12 @@ class DownloadManager {
     return new Bluebird<string>((resolve, reject) => {
       let fd = null;
       let counter = 0;
-      const ext = path.extname(fileName);
-      const base = path.basename(fileName, ext);
+      var ext = path.extname(fileName);
+      var base = path.basename(fileName, ext);
       let first: boolean = true;
       let fullPath = path.join(destination, fileName);
 
-      const loop = () => {
+      var loop = () => {
         fs.openAsync(fullPath, 'wx')
           .then((newFd) => {
             fd = newFd;
@@ -1533,7 +1533,7 @@ class DownloadManager {
             resolve(fullPath);
           }).catch((err) => {
             ++counter;
-            const tryName = `${base}.${counter}${ext}`;
+            var tryName = `${base}.${counter}${ext}`;
             fullPath = path.join(destination, tryName);
             if (err.code === 'EEXIST') {
               if (first && this.mFileExistsCB !== undefined) {
