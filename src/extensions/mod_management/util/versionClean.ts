@@ -1,7 +1,7 @@
 import * as semver from 'semver';
 
 function versionClean(input: string): string {
-  let res = semver.valid(
+  const res = semver.valid(
     semver.coerce(input, { includePrerelease: true })
   );
   if (res !== null) {
