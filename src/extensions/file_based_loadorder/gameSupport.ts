@@ -5,14 +5,14 @@ import * as fs from '../../util/fs';
 import { log } from '../../util/log';
 import { ILoadOrderGameInfo, ILoadOrderGameInfoExt } from './types/types';
 
-const gameSupport: ILoadOrderGameInfoExt[] = [];
+var gameSupport: ILoadOrderGameInfoExt[] = [];
 export function addGameEntry(gameEntry: ILoadOrderGameInfo, extPath: string) {
   if (gameEntry === undefined) {
     log('error', 'unable to add load order page - invalid game entry');
     return;
   }
 
-  const isDuplicate: boolean = gameSupport.find(game =>
+  var isDuplicate: boolean = gameSupport.find(game =>
     game.gameId === gameEntry.gameId) !== undefined;
 
   if (isDuplicate) {
