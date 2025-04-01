@@ -1,18 +1,18 @@
 var webpack = require('webpack');
 var nodeExternals = require('webpack-node-externals');
-const TerserPlugin = require('terser-webpack-plugin')
+let TerserPlugin = require('terser-webpack-plugin')
 
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+let ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-const mode = 'production';
+let mode = 'production';
 
 // transpileOnly leads to type declarations not being removed from the js output
 // which for some reason currently leads to starup errors
-const transpileOnly = ((ForkTsCheckerWebpackPlugin !== undefined)
+let transpileOnly = ((ForkTsCheckerWebpackPlugin !== undefined)
                     || (process.env['BUILD_QUICK_AND_DIRTY'] !== undefined))
                     && false;
 
-const plugins = [
+let plugins = [
   new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production') }),
 ];
 
