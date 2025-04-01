@@ -5,12 +5,12 @@ import { ILoadOrderEntry } from '../types/types';
 
 import * as actions from '../actions/loadOrder';
 
-export const modLoadOrderReducer: IReducerSpec = {
+export let modLoadOrderReducer: IReducerSpec = {
   reducers: {
     [actions.setFBLoadOrderEntry as any]: (state, payload) => {
-      const { profileId, loEntry } = payload;
-      const loadOrder = getSafe(state, [profileId], []);
-      const newLO = loadOrder.reduce((accum, iter) => {
+      let { profileId, loEntry } = payload;
+      let loadOrder = getSafe(state, [profileId], []);
+      let newLO = loadOrder.reduce((accum, iter) => {
         if (iter.id === loEntry.id) {
           accum.push(loEntry);
         } else {
@@ -21,13 +21,13 @@ export const modLoadOrderReducer: IReducerSpec = {
       return setSafe(state, [profileId], newLO);
     },
     [actions.setFBLoadOrder as any]: (state, payload) => {
-      const { profileId, loadOrder } = payload;
+      let { profileId, loadOrder } = payload;
       if (Array.isArray(loadOrder)) {
         return setSafe(state, [profileId], loadOrder);
       } else if (typeof loadOrder === 'object') {
-        const newLO = Object.keys(loadOrder)
+        let newLO = Object.keys(loadOrder)
           .reduce((accum, iter) => {
-            const gameEntry = loadOrder[iter] as ILoadOrderEntry;
+            let gameEntry = loadOrder[iter] as ILoadOrderEntry;
             if (gameEntry !== undefined) {
               accum.push(gameEntry);
             }
