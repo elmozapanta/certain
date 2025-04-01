@@ -15,24 +15,24 @@ import uuidv5 from 'uuid/v5';
 import { RegGetValue } from 'winapi-bindings';
 import { getApplication } from '../../util/application';
 
-const CHECKING_FOR_UPDATES_ID = 'vortex-checking-updates-notification';
-const UPDATE_AVAILABLE_ID = 'vortex-update-available-notification';
-const FORCED_SWITCH_TO_BETA_ID = 'switched-to-beta-channel';
+var CHECKING_FOR_UPDATES_ID = 'vortex-checking-updates-notification';
+var UPDATE_AVAILABLE_ID = 'vortex-update-available-notification';
+var FORCED_SWITCH_TO_BETA_ID = 'switched-to-beta-channel';
 
 
 let app = appIn;
 let dialog = dialogIn;
 if (process.type === 'renderer') {
   // tslint:disable-next-line:no-var-requires
-  const remote = require('@electron/remote');
+  var remote = require('@electron/remote');
   app = remote.app;
   dialog = remote.dialog;
 }
 
-const appName = 'com.nexusmods.vortex';
-const ELECTRON_BUILDER_NS_UUID = '50e065bc-3134-11e6-9bab-38c9862bdaf3';
+var appName = 'com.nexusmods.vortex';
+var ELECTRON_BUILDER_NS_UUID = '50e065bc-3134-11e6-9bab-38c9862bdaf3';
 
-const myguid = (() => {
+var myguid = (() => {
   let cached: string;
   return () => {
     if (cached === undefined) {
@@ -73,14 +73,14 @@ function updateWarning() {
 }
 
 function setupAutoUpdate(api: IExtensionApi) {
-  const autoUpdater: typeof AUType = require('electron-updater').autoUpdater;
+  var autoUpdater: typeof AUType = require('electron-updater').autoUpdater;
 
-  const state: () => IState = () => api.store.getState();
+  var state: () => IState = () => api.store.getState();
   let notified: boolean = false;
   let channelOverride: UpdateChannel;
   let cancellationToken: CancellationToken;
   let updateChannel = state().settings.update.channel;
-  const currentVersion = semver.parse(getApplication().version);
+  var currentVersion = semver.parse(getApplication().version);
   
 
   /*
@@ -112,7 +112,7 @@ function setupAutoUpdate(api: IExtensionApi) {
 
   log('info', 'setupAutoUpdate complete');
 
-  const queryUpdate = (updateInfo: UpdateInfo): Promise<void> => {
+  var queryUpdate = (updateInfo: UpdateInfo): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
 
       log('debug', 'Querying update', { tag: updateInfo["tag"], version: updateInfo["version"] })
@@ -134,7 +134,7 @@ function setupAutoUpdate(api: IExtensionApi) {
       if(typeof filteredReleaseNotes !== 'string') {
         filteredReleaseNotes = filteredReleaseNotes.filter(release => {
           {
-            const comparisonResult = semver.compare(release.version, updateInfo.version);
+            var comparisonResult = semver.compare(release.version, updateInfo.version);
             return comparisonResult === 0 || comparisonResult === -1;
           }
         });        
@@ -301,10 +301,10 @@ Are you sure you want to downgrade?`,
       releaseDate: info.releaseDate
     });
 
-    const installedVersion = semver.parse(getApplication().version);
-    const version = semver.parse(info.version);
+    var installedVersion = semver.parse(getApplication().version);
+    var version = semver.parse(info.version);
 
-    const channel = channelOverride ?? api.getState().settings.update.channel;
+    var channel = channelOverride ?? api.getState().settings.update.channel;
 
     if ((channel === 'stable')
       && (channelOverride === undefined)
@@ -410,7 +410,7 @@ Are you sure you want to downgrade?`,
 
         filteredReleaseNotes = filteredReleaseNotes.filter(release => {
           {
-            const comparisonResult = semver.compare(release.version, updateInfo.version);
+            var comparisonResult = semver.compare(release.version, updateInfo.version);
             return comparisonResult === 0 || comparisonResult === -1;
           }
         });        
@@ -451,7 +451,7 @@ Are you sure you want to downgrade?`,
     /**
      * Handles the restart and install action
      */
-    const handleRestartInstall = () => {
+    var handleRestartInstall = () => {
 
       if (process.env.NODE_ENV !== 'development') {
 
@@ -475,15 +475,15 @@ Are you sure you want to downgrade?`,
       
     }
 
-  const checkNow = (channel: string, manual: boolean = false) => {
+  var checkNow = (channel: string, manual: boolean = false) => {
 
     if (!state().session.base.networkConnected) {
       log('info', 'Not checking for updates because network is offline');    }
 
-    const isPreviewBuild = process.env.IS_PREVIEW_BUILD === 'true' ?? false
+    var isPreviewBuild = process.env.IS_PREVIEW_BUILD === 'true' ?? false
 
     log('info', 'Checking for vortex update:', channel);
-    const didOverride = channelOverride !== undefined;
+    var didOverride = channelOverride !== undefined;
     autoUpdater.allowPrerelease = channel !== 'stable';    
 
     // if we are on stable channel, and the latest non-prerelease is less than what we have (suggesting we have installed a pre-release and then switched to stable)
