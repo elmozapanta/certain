@@ -8,7 +8,7 @@ import { IProfile } from '../types/IProfile';
 /**
  * reducer for changes to ephemeral session state
  */
-export const profilesReducer: IReducerSpec = {
+export let profilesReducer: IReducerSpec = {
   reducers: {
     [actions.setProfile as any]: (state, payload: IProfile) =>
       setSafe(state, [payload.id], {
@@ -24,7 +24,7 @@ export const profilesReducer: IReducerSpec = {
       return setSafe(state, [payload, 'pendingRemove'], true);
     },
     [actions.setModEnabled as any]: (state, payload) => {
-      const { profileId, modId, enable } = payload;
+      let { profileId, modId, enable } = payload;
 
       if (state[profileId] === undefined) {
         return state;
@@ -48,7 +48,7 @@ export const profilesReducer: IReducerSpec = {
     [actions.forgetMod as any]: (state, payload) =>
       deleteOrNop(state, [payload.profileId, 'modState', payload.modId]),
     [actions.setFeature as any]: (state, payload) => {
-      const { profileId, featureId, value } = payload;
+      let { profileId, featureId, value } = payload;
 
       if (state[profileId] === undefined) {
         return state;
