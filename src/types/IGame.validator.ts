@@ -1,10 +1,10 @@
 // @ts-nocheck
 
 'use strict';
-var equal = require('ajv/lib/compile/equal');
-var validate = (function() {
-  var refVal = [];
-  var refVal1 = {
+const equal = require('ajv/lib/compile/equal');
+const validate = (function() {
+  const refVal = [];
+  const refVal1 = {
     "defaultProperties": [],
     "description": "static information about a tool associated with a game.\nThis info is used to discover such tools and to store that\ndata after discovery\nIt is also the base class for the IGame structure, representing\nthe games themselves",
     "properties": {
@@ -81,10 +81,10 @@ var validate = (function() {
   refVal[1] = refVal1;
   return function validate(data, dataPath, parentData, parentDataProperty, rootData) {
     'use strict';
-    var vErrors = null;
-    var errors = 0;
+    const vErrors = null;
+    const errors = 0;
     if ((data && typeof data === "object" && !Array.isArray(data))) {
-      var missing0;
+      const missing0;
       if (((data.executable === undefined) && (missing0 = '.executable')) || ((data.queryModPath === undefined) && (missing0 = '.queryModPath'))) {
         validate.errors = [{
           keyword: 'required',
@@ -97,12 +97,12 @@ var validate = (function() {
         }];
         return false;
       } else {
-        var errs__0 = errors;
-        var valid1 = true;
+        const errs__0 = errors;
+        const valid1 = true;
         if (data.contributed === undefined) {
           valid1 = true;
         } else {
-          var errs_1 = errors;
+          const errs_1 = errors;
           if (typeof data.contributed !== "string") {
             validate.errors = [{
               keyword: 'type',
@@ -115,14 +115,14 @@ var validate = (function() {
             }];
             return false;
           }
-          var valid1 = errors === errs_1;
+          const valid1 = errors === errs_1;
         }
         if (valid1) {
           if (valid1) {
             if (data.detach === undefined) {
               valid1 = true;
             } else {
-              var errs_1 = errors;
+              const errs_1 = errors;
               if (typeof data.detach !== "boolean") {
                 validate.errors = [{
                   keyword: 'type',
@@ -135,17 +135,17 @@ var validate = (function() {
                 }];
                 return false;
               }
-              var valid1 = errors === errs_1;
+              const valid1 = errors === errs_1;
             }
             if (valid1) {
-              var data1 = data.details;
+              const data1 = data.details;
               if (data1 === undefined) {
                 valid1 = true;
               } else {
-                var errs_1 = errors;
+                const errs_1 = errors;
                 if ((data1 && typeof data1 === "object" && !Array.isArray(data1))) {
-                  var errs__1 = errors;
-                  var valid2 = true;
+                  const errs__1 = errors;
+                  const valid2 = true;
                 } else {
                   validate.errors = [{
                     keyword: 'type',
@@ -158,17 +158,17 @@ var validate = (function() {
                   }];
                   return false;
                 }
-                var valid1 = errors === errs_1;
+                const valid1 = errors === errs_1;
               }
               if (valid1) {
-                var data1 = data.environment;
+                const data1 = data.environment;
                 if (data1 === undefined) {
                   valid1 = true;
                 } else {
-                  var errs_1 = errors;
+                  const errs_1 = errors;
                   if ((data1 && typeof data1 === "object" && !Array.isArray(data1))) {
-                    var errs__1 = errors;
-                    var valid2 = true;
+                    const errs__1 = errors;
+                    const valid2 = true;
                   } else {
                     validate.errors = [{
                       keyword: 'type',
@@ -181,13 +181,13 @@ var validate = (function() {
                     }];
                     return false;
                   }
-                  var valid1 = errors === errs_1;
+                  const valid1 = errors === errs_1;
                 }
                 if (valid1) {
                   if (data.exclusive === undefined) {
                     valid1 = true;
                   } else {
-                    var errs_1 = errors;
+                    const errs_1 = errors;
                     if (typeof data.exclusive !== "boolean") {
                       validate.errors = [{
                         keyword: 'type',
@@ -200,14 +200,14 @@ var validate = (function() {
                       }];
                       return false;
                     }
-                    var valid1 = errors === errs_1;
+                    const valid1 = errors === errs_1;
                   }
                   if (valid1) {
                     if (valid1) {
                       if (data.extensionPath === undefined) {
                         valid1 = true;
                       } else {
-                        var errs_1 = errors;
+                        const errs_1 = errors;
                         if (typeof data.extensionPath !== "string") {
                           validate.errors = [{
                             keyword: 'type',
@@ -220,13 +220,13 @@ var validate = (function() {
                           }];
                           return false;
                         }
-                        var valid1 = errors === errs_1;
+                        const valid1 = errors === errs_1;
                       }
                       if (valid1) {
                         if (data.final === undefined) {
                           valid1 = true;
                         } else {
-                          var errs_1 = errors;
+                          const errs_1 = errors;
                           if (typeof data.final !== "boolean") {
                             validate.errors = [{
                               keyword: 'type',
@@ -239,7 +239,7 @@ var validate = (function() {
                             }];
                             return false;
                           }
-                          var valid1 = errors === errs_1;
+                          const valid1 = errors === errs_1;
                         }
                         if (valid1) {
                           if (valid1) {
@@ -256,7 +256,7 @@ var validate = (function() {
                               }];
                               return false;
                             } else {
-                              var errs_1 = errors;
+                              const errs_1 = errors;
                               if (typeof data.id !== "string") {
                                 validate.errors = [{
                                   keyword: 'type',
@@ -269,13 +269,13 @@ var validate = (function() {
                                 }];
                                 return false;
                               }
-                              var valid1 = errors === errs_1;
+                              const valid1 = errors === errs_1;
                             }
                             if (valid1) {
                               if (data.logo === undefined) {
                                 valid1 = true;
                               } else {
-                                var errs_1 = errors;
+                                const errs_1 = errors;
                                 if (typeof data.logo !== "string") {
                                   validate.errors = [{
                                     keyword: 'type',
@@ -288,7 +288,7 @@ var validate = (function() {
                                   }];
                                   return false;
                                 }
-                                var valid1 = errors === errs_1;
+                                const valid1 = errors === errs_1;
                               }
                               if (valid1) {
                                 if (valid1) {
@@ -305,14 +305,14 @@ var validate = (function() {
                                     }];
                                     return false;
                                   } else {
-                                    var errs_1 = errors;
-                                    var valid1 = errors === errs_1;
+                                    const errs_1 = errors;
+                                    const valid1 = errors === errs_1;
                                   }
                                   if (valid1) {
                                     if (data.modTypes === undefined) {
                                       valid1 = true;
                                     } else {
-                                      var errs_1 = errors;
+                                      const errs_1 = errors;
                                       if (!Array.isArray(data.modTypes)) {
                                         validate.errors = [{
                                           keyword: 'type',
@@ -325,7 +325,7 @@ var validate = (function() {
                                         }];
                                         return false;
                                       }
-                                      var valid1 = errors === errs_1;
+                                      const valid1 = errors === errs_1;
                                     }
                                     if (valid1) {
                                       if (data.name === undefined) {
@@ -341,7 +341,7 @@ var validate = (function() {
                                         }];
                                         return false;
                                       } else {
-                                        var errs_1 = errors;
+                                        const errs_1 = errors;
                                         if (typeof data.name !== "string") {
                                           validate.errors = [{
                                             keyword: 'type',
@@ -354,14 +354,14 @@ var validate = (function() {
                                           }];
                                           return false;
                                         }
-                                        var valid1 = errors === errs_1;
+                                        const valid1 = errors === errs_1;
                                       }
                                       if (valid1) {
-                                        var data1 = data.onStart;
+                                        const data1 = data.onStart;
                                         if (data1 === undefined) {
                                           valid1 = true;
                                         } else {
-                                          var errs_1 = errors;
+                                          const errs_1 = errors;
                                           if (typeof data1 !== "string") {
                                             validate.errors = [{
                                               keyword: 'type',
@@ -374,10 +374,10 @@ var validate = (function() {
                                             }];
                                             return false;
                                           }
-                                          var schema1 = validate.schema.properties.onStart.enum;
-                                          var valid1;
+                                          const schema1 = validate.schema.properties.onStart.enum;
+                                          const valid1;
                                           valid1 = false;
-                                          for (var i1 = 0; i1 < schema1.length; i1++)
+                                          for (const i1 = 0; i1 < schema1.length; i1++)
                                             if (equal(data1, schema1[i1])) {
                                               valid1 = true;
                                               break;
@@ -393,19 +393,19 @@ var validate = (function() {
                                             }];
                                             return false;
                                           }
-                                          var valid1 = errors === errs_1;
+                                          const valid1 = errors === errs_1;
                                         }
                                         if (valid1) {
-                                          var data1 = data.parameters;
+                                          const data1 = data.parameters;
                                           if (data1 === undefined) {
                                             valid1 = true;
                                           } else {
-                                            var errs_1 = errors;
+                                            const errs_1 = errors;
                                             if (Array.isArray(data1)) {
-                                              var errs__1 = errors;
-                                              var valid1;
-                                              for (var i1 = 0; i1 < data1.length; i1++) {
-                                                var errs_2 = errors;
+                                              const errs__1 = errors;
+                                              const valid1;
+                                              for (const i1 = 0; i1 < data1.length; i1++) {
+                                                const errs_2 = errors;
                                                 if (typeof data1[i1] !== "string") {
                                                   validate.errors = [{
                                                     keyword: 'type',
@@ -418,7 +418,7 @@ var validate = (function() {
                                                   }];
                                                   return false;
                                                 }
-                                                var valid2 = errors === errs_2;
+                                                const valid2 = errors === errs_2;
                                                 if (!valid2) break;
                                               }
                                             } else {
@@ -433,7 +433,7 @@ var validate = (function() {
                                               }];
                                               return false;
                                             }
-                                            var valid1 = errors === errs_1;
+                                            const valid1 = errors === errs_1;
                                           }
                                           if (valid1) {
                                             if (valid1) {
@@ -441,7 +441,7 @@ var validate = (function() {
                                                 if (data.relative === undefined) {
                                                   valid1 = true;
                                                 } else {
-                                                  var errs_1 = errors;
+                                                  const errs_1 = errors;
                                                   if (typeof data.relative !== "boolean") {
                                                     validate.errors = [{
                                                       keyword: 'type',
@@ -454,10 +454,10 @@ var validate = (function() {
                                                     }];
                                                     return false;
                                                   }
-                                                  var valid1 = errors === errs_1;
+                                                  const valid1 = errors === errs_1;
                                                 }
                                                 if (valid1) {
-                                                  var data1 = data.requiredFiles;
+                                                  const data1 = data.requiredFiles;
                                                   if (data1 === undefined) {
                                                     valid1 = false;
                                                     validate.errors = [{
@@ -471,12 +471,12 @@ var validate = (function() {
                                                     }];
                                                     return false;
                                                   } else {
-                                                    var errs_1 = errors;
+                                                    const errs_1 = errors;
                                                     if (Array.isArray(data1)) {
-                                                      var errs__1 = errors;
-                                                      var valid1;
-                                                      for (var i1 = 0; i1 < data1.length; i1++) {
-                                                        var errs_2 = errors;
+                                                      const errs__1 = errors;
+                                                      const valid1;
+                                                      for (const i1 = 0; i1 < data1.length; i1++) {
+                                                        const errs_2 = errors;
                                                         if (typeof data1[i1] !== "string") {
                                                           validate.errors = [{
                                                             keyword: 'type',
@@ -489,7 +489,7 @@ var validate = (function() {
                                                           }];
                                                           return false;
                                                         }
-                                                        var valid2 = errors === errs_2;
+                                                        const valid2 = errors === errs_2;
                                                         if (!valid2) break;
                                                       }
                                                     } else {
@@ -504,13 +504,13 @@ var validate = (function() {
                                                       }];
                                                       return false;
                                                     }
-                                                    var valid1 = errors === errs_1;
+                                                    const valid1 = errors === errs_1;
                                                   }
                                                   if (valid1) {
                                                     if (data.requiresCleanup === undefined) {
                                                       valid1 = true;
                                                     } else {
-                                                      var errs_1 = errors;
+                                                      const errs_1 = errors;
                                                       if (typeof data.requiresCleanup !== "boolean") {
                                                         validate.errors = [{
                                                           keyword: 'type',
@@ -523,7 +523,7 @@ var validate = (function() {
                                                         }];
                                                         return false;
                                                       }
-                                                      var valid1 = errors === errs_1;
+                                                      const valid1 = errors === errs_1;
                                                     }
                                                     if (valid1) {
                                                       if (valid1) {
@@ -531,7 +531,7 @@ var validate = (function() {
                                                           if (data.shell === undefined) {
                                                             valid1 = true;
                                                           } else {
-                                                            var errs_1 = errors;
+                                                            const errs_1 = errors;
                                                             if (typeof data.shell !== "boolean") {
                                                               validate.errors = [{
                                                                 keyword: 'type',
@@ -544,13 +544,13 @@ var validate = (function() {
                                                               }];
                                                               return false;
                                                             }
-                                                            var valid1 = errors === errs_1;
+                                                            const valid1 = errors === errs_1;
                                                           }
                                                           if (valid1) {
                                                             if (data.shortName === undefined) {
                                                               valid1 = true;
                                                             } else {
-                                                              var errs_1 = errors;
+                                                              const errs_1 = errors;
                                                               if (typeof data.shortName !== "string") {
                                                                 validate.errors = [{
                                                                   keyword: 'type',
@@ -563,23 +563,23 @@ var validate = (function() {
                                                                 }];
                                                                 return false;
                                                               }
-                                                              var valid1 = errors === errs_1;
+                                                              const valid1 = errors === errs_1;
                                                             }
                                                             if (valid1) {
-                                                              var data1 = data.supportedTools;
+                                                              const data1 = data.supportedTools;
                                                               if (data1 === undefined) {
                                                                 valid1 = true;
                                                               } else {
-                                                                var errs_1 = errors;
+                                                                const errs_1 = errors;
                                                                 if (Array.isArray(data1)) {
-                                                                  var errs__1 = errors;
-                                                                  var valid1;
-                                                                  for (var i1 = 0; i1 < data1.length; i1++) {
-                                                                    var data2 = data1[i1];
-                                                                    var errs_2 = errors;
-                                                                    var errs_3 = errors;
+                                                                  const errs__1 = errors;
+                                                                  const valid1;
+                                                                  for (const i1 = 0; i1 < data1.length; i1++) {
+                                                                    const data2 = data1[i1];
+                                                                    const errs_2 = errors;
+                                                                    const errs_3 = errors;
                                                                     if ((data2 && typeof data2 === "object" && !Array.isArray(data2))) {
-                                                                      var missing3;
+                                                                      const missing3;
                                                                       if (((data2.executable === undefined) && (missing3 = '.executable'))) {
                                                                         validate.errors = [{
                                                                           keyword: 'required',
@@ -592,12 +592,12 @@ var validate = (function() {
                                                                         }];
                                                                         return false;
                                                                       } else {
-                                                                        var errs__3 = errors;
-                                                                        var valid4 = true;
+                                                                        const errs__3 = errors;
+                                                                        const valid4 = true;
                                                                         if (data2.detach === undefined) {
                                                                           valid4 = true;
                                                                         } else {
-                                                                          var errs_4 = errors;
+                                                                          const errs_4 = errors;
                                                                           if (typeof data2.detach !== "boolean") {
                                                                             validate.errors = [{
                                                                               keyword: 'type',
@@ -610,19 +610,19 @@ var validate = (function() {
                                                                             }];
                                                                             return false;
                                                                           }
-                                                                          var valid4 = errors === errs_4;
+                                                                          const valid4 = errors === errs_4;
                                                                         }
                                                                         if (valid4) {
-                                                                          var data3 = data2.environment;
+                                                                          const data3 = data2.environment;
                                                                           if (data3 === undefined) {
                                                                             valid4 = true;
                                                                           } else {
-                                                                            var errs_4 = errors;
+                                                                            const errs_4 = errors;
                                                                             if ((data3 && typeof data3 === "object" && !Array.isArray(data3))) {
-                                                                              var errs__4 = errors;
-                                                                              var valid5 = true;
-                                                                              for (var key4 in data3) {
-                                                                                var errs_5 = errors;
+                                                                              const errs__4 = errors;
+                                                                              const valid5 = true;
+                                                                              for (const key4 in data3) {
+                                                                                const errs_5 = errors;
                                                                                 if (typeof data3[key4] !== "string") {
                                                                                   validate.errors = [{
                                                                                     keyword: 'type',
@@ -635,7 +635,7 @@ var validate = (function() {
                                                                                   }];
                                                                                   return false;
                                                                                 }
-                                                                                var valid5 = errors === errs_5;
+                                                                                const valid5 = errors === errs_5;
                                                                                 if (!valid5) break;
                                                                               }
                                                                             } else {
@@ -650,13 +650,13 @@ var validate = (function() {
                                                                               }];
                                                                               return false;
                                                                             }
-                                                                            var valid4 = errors === errs_4;
+                                                                            const valid4 = errors === errs_4;
                                                                           }
                                                                           if (valid4) {
                                                                             if (data2.exclusive === undefined) {
                                                                               valid4 = true;
                                                                             } else {
-                                                                              var errs_4 = errors;
+                                                                              const errs_4 = errors;
                                                                               if (typeof data2.exclusive !== "boolean") {
                                                                                 validate.errors = [{
                                                                                   keyword: 'type',
@@ -669,7 +669,7 @@ var validate = (function() {
                                                                                 }];
                                                                                 return false;
                                                                               }
-                                                                              var valid4 = errors === errs_4;
+                                                                              const valid4 = errors === errs_4;
                                                                             }
                                                                             if (valid4) {
                                                                               if (valid4) {
@@ -686,7 +686,7 @@ var validate = (function() {
                                                                                   }];
                                                                                   return false;
                                                                                 } else {
-                                                                                  var errs_4 = errors;
+                                                                                  const errs_4 = errors;
                                                                                   if (typeof data2.id !== "string") {
                                                                                     validate.errors = [{
                                                                                       keyword: 'type',
@@ -699,13 +699,13 @@ var validate = (function() {
                                                                                     }];
                                                                                     return false;
                                                                                   }
-                                                                                  var valid4 = errors === errs_4;
+                                                                                  const valid4 = errors === errs_4;
                                                                                 }
                                                                                 if (valid4) {
                                                                                   if (data2.logo === undefined) {
                                                                                     valid4 = true;
                                                                                   } else {
-                                                                                    var errs_4 = errors;
+                                                                                    const errs_4 = errors;
                                                                                     if (typeof data2.logo !== "string") {
                                                                                       validate.errors = [{
                                                                                         keyword: 'type',
@@ -718,7 +718,7 @@ var validate = (function() {
                                                                                       }];
                                                                                       return false;
                                                                                     }
-                                                                                    var valid4 = errors === errs_4;
+                                                                                    const valid4 = errors === errs_4;
                                                                                   }
                                                                                   if (valid4) {
                                                                                     if (data2.name === undefined) {
@@ -734,7 +734,7 @@ var validate = (function() {
                                                                                       }];
                                                                                       return false;
                                                                                     } else {
-                                                                                      var errs_4 = errors;
+                                                                                      const errs_4 = errors;
                                                                                       if (typeof data2.name !== "string") {
                                                                                         validate.errors = [{
                                                                                           keyword: 'type',
@@ -747,14 +747,14 @@ var validate = (function() {
                                                                                         }];
                                                                                         return false;
                                                                                       }
-                                                                                      var valid4 = errors === errs_4;
+                                                                                      const valid4 = errors === errs_4;
                                                                                     }
                                                                                     if (valid4) {
-                                                                                      var data3 = data2.onStart;
+                                                                                      const data3 = data2.onStart;
                                                                                       if (data3 === undefined) {
                                                                                         valid4 = true;
                                                                                       } else {
-                                                                                        var errs_4 = errors;
+                                                                                        const errs_4 = errors;
                                                                                         if (typeof data3 !== "string") {
                                                                                           validate.errors = [{
                                                                                             keyword: 'type',
@@ -767,10 +767,10 @@ var validate = (function() {
                                                                                           }];
                                                                                           return false;
                                                                                         }
-                                                                                        var schema4 = refVal1.properties.onStart.enum;
-                                                                                        var valid4;
+                                                                                        const schema4 = refVal1.properties.onStart.enum;
+                                                                                        const valid4;
                                                                                         valid4 = false;
-                                                                                        for (var i4 = 0; i4 < schema4.length; i4++)
+                                                                                        for (const i4 = 0; i4 < schema4.length; i4++)
                                                                                           if (equal(data3, schema4[i4])) {
                                                                                             valid4 = true;
                                                                                             break;
@@ -786,19 +786,19 @@ var validate = (function() {
                                                                                           }];
                                                                                           return false;
                                                                                         }
-                                                                                        var valid4 = errors === errs_4;
+                                                                                        const valid4 = errors === errs_4;
                                                                                       }
                                                                                       if (valid4) {
-                                                                                        var data3 = data2.parameters;
+                                                                                        const data3 = data2.parameters;
                                                                                         if (data3 === undefined) {
                                                                                           valid4 = true;
                                                                                         } else {
-                                                                                          var errs_4 = errors;
+                                                                                          const errs_4 = errors;
                                                                                           if (Array.isArray(data3)) {
-                                                                                            var errs__4 = errors;
-                                                                                            var valid4;
-                                                                                            for (var i4 = 0; i4 < data3.length; i4++) {
-                                                                                              var errs_5 = errors;
+                                                                                            const errs__4 = errors;
+                                                                                            const valid4;
+                                                                                            for (const i4 = 0; i4 < data3.length; i4++) {
+                                                                                              const errs_5 = errors;
                                                                                               if (typeof data3[i4] !== "string") {
                                                                                                 validate.errors = [{
                                                                                                   keyword: 'type',
@@ -811,7 +811,7 @@ var validate = (function() {
                                                                                                 }];
                                                                                                 return false;
                                                                                               }
-                                                                                              var valid5 = errors === errs_5;
+                                                                                              const valid5 = errors === errs_5;
                                                                                               if (!valid5) break;
                                                                                             }
                                                                                           } else {
@@ -826,14 +826,14 @@ var validate = (function() {
                                                                                             }];
                                                                                             return false;
                                                                                           }
-                                                                                          var valid4 = errors === errs_4;
+                                                                                          const valid4 = errors === errs_4;
                                                                                         }
                                                                                         if (valid4) {
                                                                                           if (valid4) {
                                                                                             if (data2.relative === undefined) {
                                                                                               valid4 = true;
                                                                                             } else {
-                                                                                              var errs_4 = errors;
+                                                                                              const errs_4 = errors;
                                                                                               if (typeof data2.relative !== "boolean") {
                                                                                                 validate.errors = [{
                                                                                                   keyword: 'type',
@@ -846,10 +846,10 @@ var validate = (function() {
                                                                                                 }];
                                                                                                 return false;
                                                                                               }
-                                                                                              var valid4 = errors === errs_4;
+                                                                                              const valid4 = errors === errs_4;
                                                                                             }
                                                                                             if (valid4) {
-                                                                                              var data3 = data2.requiredFiles;
+                                                                                              const data3 = data2.requiredFiles;
                                                                                               if (data3 === undefined) {
                                                                                                 valid4 = false;
                                                                                                 validate.errors = [{
@@ -863,12 +863,12 @@ var validate = (function() {
                                                                                                 }];
                                                                                                 return false;
                                                                                               } else {
-                                                                                                var errs_4 = errors;
+                                                                                                const errs_4 = errors;
                                                                                                 if (Array.isArray(data3)) {
-                                                                                                  var errs__4 = errors;
-                                                                                                  var valid4;
-                                                                                                  for (var i4 = 0; i4 < data3.length; i4++) {
-                                                                                                    var errs_5 = errors;
+                                                                                                  const errs__4 = errors;
+                                                                                                  const valid4;
+                                                                                                  for (const i4 = 0; i4 < data3.length; i4++) {
+                                                                                                    const errs_5 = errors;
                                                                                                     if (typeof data3[i4] !== "string") {
                                                                                                       validate.errors = [{
                                                                                                         keyword: 'type',
@@ -881,7 +881,7 @@ var validate = (function() {
                                                                                                       }];
                                                                                                       return false;
                                                                                                     }
-                                                                                                    var valid5 = errors === errs_5;
+                                                                                                    const valid5 = errors === errs_5;
                                                                                                     if (!valid5) break;
                                                                                                   }
                                                                                                 } else {
@@ -896,13 +896,13 @@ var validate = (function() {
                                                                                                   }];
                                                                                                   return false;
                                                                                                 }
-                                                                                                var valid4 = errors === errs_4;
+                                                                                                const valid4 = errors === errs_4;
                                                                                               }
                                                                                               if (valid4) {
                                                                                                 if (data2.shell === undefined) {
                                                                                                   valid4 = true;
                                                                                                 } else {
-                                                                                                  var errs_4 = errors;
+                                                                                                  const errs_4 = errors;
                                                                                                   if (typeof data2.shell !== "boolean") {
                                                                                                     validate.errors = [{
                                                                                                       keyword: 'type',
@@ -915,13 +915,13 @@ var validate = (function() {
                                                                                                     }];
                                                                                                     return false;
                                                                                                   }
-                                                                                                  var valid4 = errors === errs_4;
+                                                                                                  const valid4 = errors === errs_4;
                                                                                                 }
                                                                                                 if (valid4) {
                                                                                                   if (data2.shortName === undefined) {
                                                                                                     valid4 = true;
                                                                                                   } else {
-                                                                                                    var errs_4 = errors;
+                                                                                                    const errs_4 = errors;
                                                                                                     if (typeof data2.shortName !== "string") {
                                                                                                       validate.errors = [{
                                                                                                         keyword: 'type',
@@ -934,7 +934,7 @@ var validate = (function() {
                                                                                                       }];
                                                                                                       return false;
                                                                                                     }
-                                                                                                    var valid4 = errors === errs_4;
+                                                                                                    const valid4 = errors === errs_4;
                                                                                                   }
                                                                                                 }
                                                                                               }
@@ -962,8 +962,8 @@ var validate = (function() {
                                                                       }];
                                                                       return false;
                                                                     }
-                                                                    var valid3 = errors === errs_3;
-                                                                    var valid2 = errors === errs_2;
+                                                                    const valid3 = errors === errs_3;
+                                                                    const valid2 = errors === errs_2;
                                                                     if (!valid2) break;
                                                                   }
                                                                 } else {
@@ -978,13 +978,13 @@ var validate = (function() {
                                                                   }];
                                                                   return false;
                                                                 }
-                                                                var valid1 = errors === errs_1;
+                                                                const valid1 = errors === errs_1;
                                                               }
                                                               if (valid1) {
                                                                 if (data.version === undefined) {
                                                                   valid1 = true;
                                                                 } else {
-                                                                  var errs_1 = errors;
+                                                                  const errs_1 = errors;
                                                                   if (typeof data.version !== "string") {
                                                                     validate.errors = [{
                                                                       keyword: 'type',
@@ -997,7 +997,7 @@ var validate = (function() {
                                                                     }];
                                                                     return false;
                                                                   }
-                                                                  var valid1 = errors === errs_1;
+                                                                  const valid1 = errors === errs_1;
                                                                 }
                                                               }
                                                             }
